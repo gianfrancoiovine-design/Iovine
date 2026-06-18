@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Gianfranco Iovine">
+    <title>Atena Compass — Bussola Decisionale AHP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Cormorant+Garamond:ital,wght@0,600;1,600&family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+    /* ══════════════════════════════════════════
+       BASE
+    ══════════════════════════════════════════ */
+    :root {
+        --primary:    #050A14;
+        --accent:     #C5A059;
+        --accent-dim: rgba(197,160,89,0.12);
+        --bg:         #FDFCFB;
+        --card:       #ffffff;
+        --text:       #1A1A1A;
+        --muted:      #666;
+        --deep:       #0A192F;
+        /* app */
+        --sidebar-w:  280px;
+        --topbar-h:   64px;
+        --radius:     12px;
+        --shadow:     0 2px 16px rgba(0,0,0,0.06);
+    }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); line-height:1.7; overflow-x:hidden; }
+
+    /* ══════════════════════════════════════════
+       LANDING — STILI
+    ══════════════════════════════════════════ */
+    #landing { position:relative; }
+
+    /* — HERO — */
+    #landing .hero {
+        min-height: 100vh;
+        background:
+            linear-gradient(to right, rgba(5,10,20,0.97), rgba(5,10,20,0.82)),
+            url('https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?auto=format&fit=crop&q=80') center/cover no-repeat;
+        display:flex; flex-direction:column; justify-content:center;
+        padding: 120px 8% 80px;
+        color: white;
+    }
+    #landing .hero-pre {
+        color:var(--accent); font-weight:800; font-size:0.72rem;
+        text-transform:uppercase; letter-spacing:4px; margin-bottom:18px;
+    }
+    #landing .hero h1 {
+        font-family:'Cormorant Garamond',serif;
+        font-size:clamp(3rem,7vw,5.5rem); line-height:1.05; margin-bottom:24px;
+    }
+    #landing .hero h1 span { color:var(--accent); }
+    #landing .hero-sub {
+        max-width:680px; font-size:clamp(0.95rem,1.5vw,1.15rem); font-weight:300;
+        border-left:3px solid var(--accent); padding-left:22px; opacity:0.82; line-height:1.75;
+        margin-bottom:44px;
+    }
+    .cta-row { display:flex; gap:16px; flex-wrap:wrap; }
+    .btn-cta {
+        padding:15px 34px; border-radius:50px; font-family:'Inter',sans-serif;
+        font-weight:700; font-size:0.85rem; letter-spacing:0.5px; cursor:pointer;
+        display:flex; align-items:center; gap:10px; transition:all 0.22s; border:none;
+        text-decoration:none;
+    }
+    .btn-cta.primary { background:var(--accent); color:var(--primary); }
+    .btn-cta.primary:hover { background:#d4af6a; transform:translateY(-3px); box-shadow:0 12px 28px rgba(197,160,89,0.35); }
+    .btn-cta.outline { background:transparent; color:white; border:1.5px solid rgba(255,255,255,0.35); }
+    .btn-cta.outline:hover { border-color:var(--accent); color:var(--accent); }
+
+    /* — SEZIONI LANDING — */
+    .l-section { padding:90px 8%; }
+    .l-section.alt { background:#F7F5F2; }
+    .l-container { max-width:1100px; margin:0 auto; }
+    .section-tag {
+        color:var(--accent); font-weight:800; font-size:0.7rem; text-transform:uppercase;
+        letter-spacing:3px; margin-bottom:12px; display:block;
+    }
+    .l-h2 {
+        font-family:'Cormorant Garamond',serif;
+        font-size:clamp(2rem,4vw,3.2rem); line-height:1.1; color:var(--deep); margin-bottom:20px;
+    }
+    .l-lead { font-size:1.1rem; font-weight:600; color:var(--deep); margin-bottom:18px; }
+    .l-p { font-size:0.97rem; color:#444; margin-bottom:14px; line-height:1.8; }
+
+    /* grid 2 col */
+    .l-grid { display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:start; }
+
+    /* — CHALLENGE — */
+    .challenge-list { list-style:none; margin:24px 0; }
+    .challenge-list li {
+        padding:14px 18px 14px 48px; position:relative; border-radius:8px;
+        background:white; margin-bottom:10px; box-shadow:var(--shadow);
+        font-size:0.92rem; font-weight:500; color:var(--deep);
+        border-left:3px solid var(--accent);
+    }
+    .challenge-list li::before {
+        content:"◈"; position:absolute; left:16px; color:var(--accent); font-size:0.9rem;
+    }
+
+    /* — CONTRIBUTORS — */
+    .contrib-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:32px; }
+    .contrib-card {
+        background:var(--primary); color:white; border-radius:var(--radius);
+        padding:30px; border-bottom:3px solid var(--accent);
+    }
+    .contrib-name { font-family:'Playfair Display',serif; font-size:1.3rem; color:var(--accent); margin-bottom:4px; }
+    .contrib-role { font-size:0.65rem; text-transform:uppercase; letter-spacing:2px; color:rgba(255,255,255,0.4); margin-bottom:14px; }
+    .contrib-bio { font-size:0.82rem; color:rgba(255,255,255,0.65); line-height:1.75; }
+
+    /* — METODO 3 CARD — */
+    .method-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:22px; margin-top:36px; }
+    .method-card {
+        background:white; border-radius:var(--radius); padding:28px;
+        box-shadow:var(--shadow); border-top:3px solid var(--accent);
+        transition:transform 0.28s, box-shadow 0.28s;
+    }
+    .method-card:hover { transform:translateY(-6px); box-shadow:0 14px 36px rgba(0,0,0,0.1); }
+    .method-card h4 {
+        font-family:'Playfair Display',serif; font-size:1.2rem; color:var(--deep);
+        margin-bottom:10px;
+    }
+    .method-card p { font-size:0.86rem; color:var(--muted); line-height:1.75; }
+
+    /* — FASI — */
+    .fase-row { display:grid; grid-template-columns:repeat(4,1fr); gap:0; margin-top:44px; }
+    .fase-item {
+        display:flex; flex-direction:column; align-items:center; text-align:center;
+        position:relative; padding:0 16px 32px;
+    }
+    .fase-item:not(:last-child)::after {
+        content:""; position:absolute; top:28px; right:-1px;
+        width:50%; height:2px; background:rgba(197,160,89,0.25);
+    }
+    .fase-num {
+        width:56px; height:56px; border-radius:50%;
+        background:var(--primary); color:var(--accent);
+        display:flex; align-items:center; justify-content:center;
+        font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:700;
+        margin-bottom:14px; flex-shrink:0; z-index:1; position:relative;
+    }
+    .fase-title { font-weight:700; font-size:0.82rem; color:var(--deep); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px; }
+    .fase-desc { font-size:0.78rem; color:var(--muted); line-height:1.65; }
+    .fase-item.active-fase .fase-num { background:var(--accent); color:var(--primary); }
+    .fase-item.active-fase .fase-title { color:var(--accent); }
+
+    /* — CITAZIONE — */
+    .quote-block {
+        background:var(--primary); border-radius:var(--radius);
+        padding:44px 52px; margin:50px 0; position:relative; overflow:hidden;
+    }
+    .quote-block::before {
+        content:"\201C"; font-family:'Cormorant Garamond',serif;
+        font-size:12rem; color:rgba(197,160,89,0.08); position:absolute;
+        top:-30px; left:20px; line-height:1; pointer-events:none;
+    }
+    .quote-block p {
+        font-family:'Cormorant Garamond',serif; font-style:italic;
+        font-size:clamp(1.2rem,2vw,1.55rem); color:white; line-height:1.6;
+        position:relative; z-index:1; max-width:800px;
+    }
+    .quote-attr { display:block; margin-top:14px; font-size:0.72rem; text-transform:uppercase;
+        letter-spacing:2px; color:var(--accent); position:relative; z-index:1; }
+
+    /* — OBIETTIVO WORKSHOP — */
+    .obj-dark {
+        background:var(--deep); color:white; border-radius:var(--radius);
+        padding:52px; margin-top:0;
+    }
+    .obj-dark .l-h2 { color:white; }
+    .obj-list { list-style:none; margin:22px 0; }
+    .obj-list li {
+        padding:10px 0 10px 32px; position:relative;
+        font-size:0.92rem; color:rgba(255,255,255,0.75); border-bottom:1px solid rgba(255,255,255,0.06);
+    }
+    .obj-list li:last-child { border:none; }
+    .obj-list li::before { content:"→"; position:absolute; left:0; color:var(--accent); font-weight:700; }
+
+    /* — CTA FINALE — */
+    .final-cta {
+        background:var(--primary); padding:100px 8%; text-align:center; color:white;
+    }
+    .final-cta h2 { font-family:'Cormorant Garamond',serif; font-size:clamp(2rem,4vw,3rem); margin-bottom:14px; }
+    .final-cta p { color:rgba(255,255,255,0.55); max-width:560px; margin:0 auto 36px; font-size:0.92rem; line-height:1.75; }
+
+    /* — FOOTER LANDING — */
+    #landing footer {
+        background:#03060d; color:white; padding:50px 8%;
+        display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px;
+    }
+    #landing footer .ft-brand { font-family:'Cormorant Garamond',serif; font-size:1.6rem; color:var(--accent); }
+    #landing footer .ft-copy { font-size:0.68rem; color:rgba(255,255,255,0.25); line-height:1.8; max-width:540px; }
+
+    /* ══════════════════════════════════════════
+       APP OVERLAY — CRUSCOTTO
+    ══════════════════════════════════════════ */
+    #app-overlay {
+        position:fixed; inset:0; z-index:1000;
+        background:#f0f2f5;
+        display:none; flex-direction:column;
+    }
+    #app-overlay.open { display:flex; }
+
+    /* TOPBAR */
+    #app-topbar {
+        height:var(--topbar-h); background:var(--primary); flex-shrink:0;
+        display:flex; align-items:center; justify-content:space-between;
+        padding:0 22px 0 calc(var(--sidebar-w) + 22px);
+        border-bottom:1px solid rgba(197,160,89,0.15); z-index:10;
+    }
+    .app-topbar-title { font-family:'Playfair Display',serif; font-size:1rem; color:white; }
+    .app-topbar-title span { color:var(--accent); }
+    .app-topbar-meta { font-size:0.65rem; color:rgba(255,255,255,0.3); text-transform:uppercase; letter-spacing:2px; }
+    .app-topbar-right { display:flex; align-items:center; gap:18px; }
+    #app-status { display:flex; align-items:center; gap:8px; font-size:0.72rem; color:rgba(255,255,255,0.5); }
+    .status-dot { width:8px;height:8px;border-radius:50%;background:#333;transition:all 0.4s;flex-shrink:0; }
+    .status-dot.s-active { background:#27ae60; box-shadow:0 0 8px rgba(39,174,96,0.7); }
+
+    #btn-close-app {
+        background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12);
+        color:rgba(255,255,255,0.6); padding:7px 16px; border-radius:50px;
+        font-size:0.72rem; font-weight:600; font-family:'Inter',sans-serif;
+        cursor:pointer; transition:0.2s; display:flex; align-items:center; gap:7px;
+    }
+    #btn-close-app:hover { background:rgba(255,255,255,0.13); color:white; }
+
+    /* BODY DELL'APP */
+    #app-body { flex:1; display:flex; overflow:hidden; }
+
+    /* SIDEBAR */
+    #app-sidebar {
+        width:var(--sidebar-w); flex-shrink:0; background:var(--primary); color:white;
+        display:flex; flex-direction:column; padding:26px 18px; gap:20px;
+        overflow-y:auto; border-right:1px solid rgba(255,255,255,0.05);
+    }
+    .app-brand { text-align:center; padding-bottom:16px; border-bottom:1px solid rgba(255,255,255,0.07); }
+    .app-brand-ring {
+        width:54px;height:54px; margin:0 auto 10px; border:2px solid var(--accent); border-radius:50%;
+        display:flex;align-items:center;justify-content:center; font-size:1.3rem; color:var(--accent);
+        animation:spinRing 12s linear infinite;
+    }
+    @keyframes spinRing { to { transform:rotate(360deg); } }
+    .app-brand h2 { font-family:'Playfair Display',serif; font-size:1.2rem; }
+    .app-brand h2 span { color:var(--accent); }
+    .app-brand-sub { font-size:0.58rem; text-transform:uppercase; letter-spacing:2px; opacity:0.35; margin-top:2px; }
+
+    .app-nav { display:flex; flex-direction:column; gap:4px; }
+    .app-nav-btn {
+        background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.06);
+        color:rgba(255,255,255,0.5); padding:10px 13px; border-radius:8px;
+        cursor:pointer; text-align:left; font-family:'Inter',sans-serif; font-size:0.8rem;
+        transition:all 0.2s; display:flex; align-items:center; gap:9px;
+    }
+    .app-nav-btn i { width:15px; text-align:center; opacity:0.7; }
+    .app-nav-btn:hover { background:rgba(255,255,255,0.09); color:white; }
+    .app-nav-btn.active { background:var(--accent); color:var(--primary); border-color:var(--accent); font-weight:700; }
+    .app-nav-btn.active i { opacity:1; }
+
+    .method-box {
+        background:rgba(255,255,255,0.03); border:1px solid rgba(197,160,89,0.18);
+        border-radius:10px; padding:15px; font-size:0.73rem; color:rgba(255,255,255,0.5); line-height:1.7; flex-grow:1;
+    }
+    .method-tag { display:block; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:1px; font-size:0.6rem; margin-bottom:7px; }
+    .method-box strong { color:rgba(255,255,255,0.72); }
+    .cr-badge {
+        display:inline-block; margin-top:11px; background:rgba(197,160,89,0.1); border:1px solid rgba(197,160,89,0.3);
+        padding:5px 13px; border-radius:20px; font-size:0.7rem; font-weight:700; color:var(--accent);
+        transition:all 0.3s; font-family:'Fira Code',monospace;
+    }
+    .sidebar-ft { padding-top:12px; border-top:1px solid rgba(255,255,255,0.07); font-size:0.62rem; color:rgba(255,255,255,0.2); text-align:center; line-height:1.7; }
+    .sidebar-ft span { color:var(--accent); opacity:0.6; }
+
+    /* MAIN APP */
+    #app-main { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+    #app-progress-wrap { height:4px; background:rgba(0,0,0,0.08); flex-shrink:0; }
+    #app-progress-bar { height:100%; background:linear-gradient(90deg,rgba(197,160,89,0.5),var(--accent)); width:0%; transition:width 0.4s ease; }
+    #app-scroll { flex:1; overflow-y:auto; padding:38px 44px; }
+
+    /* — SECTIONS — */
+    .app-section { display:none; }
+    .app-section.active { display:block; animation:fadeIn 0.3s ease; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)} }
+
+    /* — WIZARD — */
+    .wiz-step { display:none; max-width:640px; margin:0 auto; }
+    .wiz-step.active { display:block; animation:slideIn 0.33s cubic-bezier(0.4,0,0.2,1); }
+    @keyframes slideIn { from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:translateX(0)} }
+
+    .step-header { margin-bottom:26px; }
+    .step-label { font-size:0.63rem; font-weight:800; color:var(--accent); text-transform:uppercase; letter-spacing:2px; display:block; margin-bottom:5px; }
+    .step-header h2 { font-family:'Playfair Display',serif; font-size:1.65rem; color:var(--primary); margin-bottom:4px; line-height:1.2; }
+    .step-header p { color:var(--muted); font-size:0.86rem; }
+
+    .form-group { margin-bottom:18px; }
+    .form-group label { display:block; font-weight:700; font-size:0.7rem; color:var(--primary); text-transform:uppercase; letter-spacing:1px; margin-bottom:7px; }
+    .atena-input { width:100%; padding:13px 15px; border:2px solid #e2e2e2; border-radius:10px; font-size:0.93rem; font-family:'Inter',sans-serif; transition:0.22s; background:white; }
+    .atena-input:focus { outline:none; border-color:var(--accent); box-shadow:0 0 0 4px rgba(197,160,89,0.1); }
+
+    .role-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:9px; }
+    .role-card { border:2px solid #e8e8e8; border-radius:10px; padding:13px 7px; text-align:center; cursor:pointer; transition:0.2s; display:flex; flex-direction:column; align-items:center; gap:6px; font-size:0.72rem; font-weight:600; color:#aaa; background:white; }
+    .role-card i { font-size:1.2rem; }
+    .role-card:hover { border-color:var(--accent); color:var(--accent); }
+    .role-card.sel { border-color:var(--accent); background:var(--accent-dim); color:var(--accent); }
+
+    .vs-arena { display:flex; align-items:center; background:var(--primary); border-radius:13px; padding:22px 26px; margin:20px 0; gap:13px; }
+    .vs-label { font-family:'Playfair Display',serif; font-size:0.98rem; color:white; flex:1; line-height:1.3; }
+    .vs-label.left { text-align:right; }
+    .vs-badge { width:44px;height:44px;border-radius:50%;background:var(--accent);color:var(--primary);font-weight:900;font-size:0.68rem;letter-spacing:1px;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+
+    .slider-zone { margin:4px 0 20px; }
+    .slider-scale { display:flex; justify-content:space-between; font-size:0.6rem; color:#bbb; font-weight:700; margin-bottom:9px; }
+    input.ahp-slider { -webkit-appearance:none; width:100%; height:7px; border-radius:4px; background:linear-gradient(to right,#3498db,#ddd 50%,#e74c3c); outline:none; cursor:pointer; }
+    input.ahp-slider::-webkit-slider-thumb { -webkit-appearance:none; width:23px;height:23px;border-radius:50%;background:white;border:4px solid var(--primary);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.2);transition:transform 0.15s; }
+    input.ahp-slider::-webkit-slider-thumb:hover { transform:scale(1.15); }
+    input.ahp-slider::-moz-range-thumb { width:23px;height:23px;border-radius:50%;background:white;border:4px solid var(--primary);cursor:pointer; }
+    .slider-feedback { text-align:center; font-size:0.88rem; font-weight:600; color:var(--primary); margin-top:9px; min-height:22px; line-height:1.4; }
+    .saaty-hint { font-size:0.68rem; color:var(--muted); text-align:center; margin-top:5px; opacity:0.65; }
+
+    .btn-row { display:flex; justify-content:space-between; align-items:center; margin-top:26px; gap:10px; }
+    .btn-next,.btn-prev { padding:12px 26px; border-radius:50px; border:none; cursor:pointer; font-weight:700; font-size:0.78rem; display:flex; align-items:center; gap:8px; transition:all 0.2s; font-family:'Inter',sans-serif; }
+    .btn-next { background:var(--primary); color:white; }
+    .btn-next:hover { background:var(--accent); color:var(--primary); transform:translateY(-2px); }
+    .btn-prev { background:#e9ecef; color:#555; }
+    .btn-prev:hover { background:#dde1e6; }
+
+    .confirm-center { text-align:center; padding:50px 20px; }
+    .confirm-icon { font-size:5rem; color:#27ae60; margin-bottom:16px; animation:popIn 0.5s cubic-bezier(0.17,0.67,0.3,1.3); }
+    @keyframes popIn{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+    .confirm-center h2 { font-family:'Playfair Display',serif; font-size:1.75rem; color:var(--primary); margin-bottom:8px; }
+    .confirm-center p { color:var(--muted); margin-bottom:26px; }
+
+    /* — DASHBOARD — */
+    .dash-hdr { margin-bottom:22px; }
+    .dash-hdr h2 { font-family:'Playfair Display',serif; font-size:1.55rem; color:var(--primary); display:flex; align-items:center; gap:9px; margin-bottom:3px; }
+    .dash-hdr p { color:var(--muted); font-size:0.83rem; }
+
+    .stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:13px; margin-bottom:18px; }
+    .stat-card { background:white; border-radius:var(--radius); padding:18px; text-align:center; box-shadow:var(--shadow); border-bottom:3px solid var(--accent); }
+    .stat-lbl { display:block; font-size:0.62rem; font-weight:800; color:#bbb; text-transform:uppercase; letter-spacing:1px; margin-bottom:5px; }
+    .stat-val { display:block; font-size:1.85rem; font-weight:700; color:var(--primary); font-family:'Playfair Display',serif; }
+
+    .charts-row { display:grid; grid-template-columns:1fr 1fr; gap:13px; margin-bottom:13px; }
+    .chart-card { background:white; border-radius:var(--radius); padding:18px; box-shadow:var(--shadow); }
+    .chart-card h4 { font-size:0.68rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:12px; display:flex; align-items:center; gap:6px; }
+    .chart-card h4 i { color:var(--accent); }
+
+    .weights-row,.interp-card { background:white; border-radius:var(--radius); padding:20px; box-shadow:var(--shadow); margin-bottom:13px; }
+    .weights-row h4,.interp-card h4 { font-size:0.68rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:12px; display:flex; align-items:center; gap:6px; }
+    .weights-row h4 i,.interp-card h4 i { color:var(--accent); }
+    #interpretation-box { background:#fff8f0; border-left:3px solid var(--accent); border-radius:6px; padding:15px 17px; font-size:0.86rem; color:#555; line-height:1.75; }
+    #interpretation-box p { margin:0 0 7px; }
+    #interpretation-box p:last-child { margin:0; }
+    .weight-bar-row { margin-bottom:11px; }
+    .weight-bar-label { display:flex; justify-content:space-between; font-size:0.78rem; font-weight:600; margin-bottom:4px; color:var(--primary); }
+    .weight-bar-track { height:7px; background:#eee; border-radius:4px; overflow:hidden; }
+    .weight-bar-fill { height:100%; border-radius:4px; transition:width 0.6s ease; }
+
+    /* — REGISTRO — */
+    .registro-wrap { overflow-x:auto; border-radius:var(--radius); box-shadow:var(--shadow); }
+    .registro-table { width:100%; border-collapse:collapse; background:white; border-radius:var(--radius); overflow:hidden; font-size:0.82rem; }
+    .registro-table th { background:var(--primary); color:white; padding:11px 15px; font-size:0.65rem; text-transform:uppercase; letter-spacing:1px; text-align:left; white-space:nowrap; }
+    .registro-table td { padding:11px 15px; border-bottom:1px solid #f2f2f2; vertical-align:middle; }
+    .registro-table tr:last-child td { border:none; }
+    .registro-table tr:hover td { background:#fafaf8; }
+    .badge-role { background:#eee; padding:3px 9px; border-radius:20px; font-size:0.72rem; }
+    .cr-ok  { color:#27ae60; font-weight:700; font-family:'Fira Code',monospace; }
+    .cr-warn{ color:#e67e22; font-weight:700; font-family:'Fira Code',monospace; }
+    .cr-err { color:#e74c3c; font-weight:700; font-family:'Fira Code',monospace; }
+    .registro-actions { display:flex; justify-content:space-between; align-items:center; margin-top:14px; flex-wrap:wrap; gap:10px; }
+    .btn-ghost { padding:9px 18px; border-radius:50px; border:1px solid #ddd; background:white; color:#555; font-size:0.76rem; font-weight:600; cursor:pointer; transition:0.2s; display:flex; align-items:center; gap:6px; font-family:'Inter',sans-serif; }
+    .btn-ghost:hover { border-color:var(--accent); color:var(--accent); }
+    .btn-danger { padding:9px 18px; border-radius:50px; border:1px solid #fdd; background:white; color:#e74c3c; font-size:0.76rem; font-weight:600; cursor:pointer; transition:0.2s; display:flex; align-items:center; gap:6px; font-family:'Inter',sans-serif; }
+    .btn-danger:hover { background:#fef0ee; border-color:#e74c3c; }
+
+    /* — MOBILE NAV — */
+    #mobile-nav { display:none; position:fixed; bottom:0; left:0; right:0; background:var(--primary); padding:9px 0 13px; z-index:1010; border-top:1px solid rgba(197,160,89,0.15); justify-content:space-around; }
+    .mnav-btn { flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; background:none; border:none; color:rgba(255,255,255,0.4); font-size:0.58rem; font-family:'Inter',sans-serif; font-weight:700; text-transform:uppercase; letter-spacing:1px; cursor:pointer; transition:color 0.2s; }
+    .mnav-btn i { font-size:1.05rem; }
+    .mnav-btn.active { color:var(--accent); }
+
+    /* ══════════════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════════════ */
+    @media(max-width:1000px){
+        .l-grid { grid-template-columns:1fr; gap:36px; }
+        .contrib-grid { grid-template-columns:1fr; }
+        .fase-row { grid-template-columns:1fr 1fr; }
+        .fase-item:nth-child(2)::after { display:none; }
+        .fase-item:nth-child(3)::after { display:none; }
+    }
+    @media(max-width:900px){
+        :root{ --sidebar-w:0px; }
+        #app-sidebar { display:none; }
+        #app-topbar { padding:0 14px; }
+        #app-scroll { padding:22px 18px; }
+        .charts-row { grid-template-columns:1fr; }
+        .stats-row { grid-template-columns:repeat(3,1fr); }
+        .role-grid { grid-template-columns:repeat(2,1fr); }
+        #mobile-nav { display:flex; }
+        #app-body { padding-bottom:56px; }
+    }
+    @media(max-width:680px){
+        .l-section { padding:60px 6%; }
+        #landing .hero { padding:90px 6% 60px; }
+        .fase-row { grid-template-columns:1fr; }
+        .fase-item::after { display:none !important; }
+        .quote-block { padding:28px 26px; }
+        .obj-dark { padding:30px 22px; }
+        .final-cta { padding:70px 6%; }
+    }
+    @media(max-width:600px){
+        .stats-row { grid-template-columns:1fr; }
+        .btn-row { flex-direction:column-reverse; }
+        .btn-next,.btn-prev { width:100%; justify-content:center; }
+        .vs-arena { flex-direction:column; gap:10px; }
+        .vs-label.left,.vs-label.right { text-align:center; }
+        .cta-row { flex-direction:column; }
+        .btn-cta { justify-content:center; }
+    }
+    </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════
+     LANDING PAGE
+══════════════════════════════════════════════════════ -->
+<div id="landing">
+
+    <!-- HERO -->
+    <section class="hero">
+        <p class="hero-pre"><i class="fas fa-compass" style="margin-right:8px;"></i> Atena Compass · Winter School 2026 · Atena Lucana</p>
+        <h1>La <span>Bussola</span><br>della Comunità.</h1>
+        <p class="hero-sub">Un metodo partecipativo basato su AHP per trasformare visioni diverse in una scelta condivisa e difendibile. Non un voto: un confronto strutturato tra valori.</p>
+        <div class="cta-row">
+            <button class="btn-cta primary" onclick="openApp()"><i class="fas fa-compass"></i> Entra nel Cruscotto</button>
+            <a class="btn-cta outline" href="#metodo"><i class="fas fa-arrow-down"></i> Scopri il Metodo</a>
+        </div>
+    </section>
+
+    <!-- LA SFIDA -->
+    <section class="l-section" id="sfida">
+        <div class="l-container">
+            <div class="l-grid">
+                <div>
+                    <span class="section-tag">La Sfida</span>
+                    <h2 class="l-h2">Armonizzare le Visioni</h2>
+                    <p class="l-lead">I territori non soffrono per mancanza di idee, ma per la difficoltà di orientarle verso una meta comune.</p>
+                    <p class="l-p">Quando una comunità deve scegliere come rigenerare uno spazio o investire risorse, emergono legittimamente punti di vista diversi. Queste visioni non sono in contrasto: sono le diverse anime di Atena Lucana. La sfida è farle dialogare.</p>
+                </div>
+                <div>
+                    <ul class="challenge-list">
+                        <li>Chi guarda alla <strong>sostenibilità economica</strong> e al ritorno degli investimenti</li>
+                        <li>Chi difende l'<strong>identità storica</strong> e il patrimonio culturale del territorio</li>
+                        <li>Chi cerca l'<strong>impatto sociale immediato</strong> per le fasce più vulnerabili</li>
+                    </ul>
+                    <div style="background:var(--accent-dim);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:18px 20px;margin-top:10px;font-size:0.88rem;color:var(--deep);line-height:1.75;">
+                        <strong>Il nostro contributo:</strong> non portiamo soluzioni preconfezionate, ma un metodo partecipativo che rende la scelta pubblica e difendibile.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- IL TEAM -->
+    <section class="l-section alt">
+        <div class="l-container">
+            <span class="section-tag">Il Nostro Contributo</span>
+            <h2 class="l-h2">Chi siamo</h2>
+            <div class="contrib-grid">
+                <div class="contrib-card">
+                    <p class="contrib-name">Gianfranco Iovine</p>
+                    <p class="contrib-role">PhD · Engineering for Energy and Environment · AHP/MCDA</p>
+                    <p class="contrib-bio">Cura l'architettura logica del sistema: trasforma i giudizi qualitativi in pesi quantitativi, verifica la coerenza dei confronti tramite il Consistency Ratio e garantisce la robustezza metodologica dell'intero processo decisionale.</p>
+                </div>
+                <div class="contrib-card">
+                    <p class="contrib-name">Monica Langone</p>
+                    <p class="contrib-role">Laureata CTF · Facilitatrice Digitale PNRR · Forum Giovani Atena Lucana</p>
+                    <p class="contrib-bio">Garantisce l'accessibilità e la mediazione con la popolazione, assicurando che il "peso" delle decisioni rispetti la reale volontà della comunità. Ponte tra il metodo scientifico e la partecipazione civica concreta.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- IL METODO -->
+    <section class="l-section" id="metodo">
+        <div class="l-container">
+            <span class="section-tag">Una Bussola per Orientarsi</span>
+            <h2 class="l-h2">Non deleghiamo la scelta a un algoritmo.<br>Usiamo la tecnologia per renderla trasparente.</h2>
+            <div class="method-cards">
+                <div class="method-card">
+                    <h4><i class="fas fa-balance-scale" style="color:var(--accent);margin-right:8px;"></i> Pesare, non contare</h4>
+                    <p>Nelle decisioni complesse, "uno vale uno" non basta. Dobbiamo capire <em>quanto</em> è importante per noi la storia rispetto al profitto, o viceversa. L'AHP quantifica questi rapporti in modo rigoroso.</p>
+                </div>
+                <div class="method-card">
+                    <h4><i class="fas fa-eye" style="color:var(--accent);margin-right:8px;"></i> Rendere visibile l'invisibile</h4>
+                    <p>I criteri di scelta restano spesso impliciti. Questo metodo costringe a esplicitare il "perché", rendendo la decisione pubblica, condivisa e difendibile davanti alla comunità.</p>
+                </div>
+                <div class="method-card">
+                    <h4><i class="fas fa-handshake" style="color:var(--accent);margin-right:8px;"></i> Dal conflitto al valore</h4>
+                    <p>Se Amministratori e Cittadini votano diversamente, non è un errore: è un dato. Visualizzare le divergenze è il primo passo per trovare una sintesi alta e condivisa.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LE FASI -->
+    <section class="l-section alt">
+        <div class="l-container">
+            <span class="section-tag">Oltre la Scelta</span>
+            <h2 class="l-h2">Il Monitoraggio Continuo</h2>
+            <p class="l-p">Una decisione condivisa è inutile se non viene realizzata e monitorata. Il cruscotto copre la Fase 1, ma è predisposto per accompagnare l'opera fino al collaudo.</p>
+            <div class="fase-row">
+                <div class="fase-item active-fase">
+                    <div class="fase-num">1</div>
+                    <p class="fase-title">Decisione (AHP)</p>
+                    <p class="fase-desc">Definizione priorità e scelta dello scenario migliore tramite confronti a coppie.</p>
+                </div>
+                <div class="fase-item">
+                    <div class="fase-num">2</div>
+                    <p class="fase-title">Finanziamento</p>
+                    <p class="fase-desc">Reperimento fondi e allocazione risorse — Budgeting partecipativo.</p>
+                </div>
+                <div class="fase-item">
+                    <div class="fase-num">3</div>
+                    <p class="fase-title">Esecuzione</p>
+                    <p class="fase-desc">Cantierizzazione e rispetto del cronoprogramma con trasparenza pubblica.</p>
+                </div>
+                <div class="fase-item">
+                    <div class="fase-num">4</div>
+                    <p class="fase-title">Impatto</p>
+                    <p class="fase-desc">Verifica KPI: abbiamo creato i posti di lavoro promessi?</p>
+                </div>
+            </div>
+
+            <div class="quote-block">
+                <p>"Il cruscotto che presentiamo oggi copre la fase 1, ma è predisposto per accompagnare l'opera fino al collaudo."</p>
+                <span class="quote-attr">— Gianfranco Iovine · Winter School, Atena Lucana 2026</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- L'OBIETTIVO -->
+    <section class="l-section">
+        <div class="l-container">
+            <span class="section-tag">L'Obiettivo per Atena</span>
+            <h2 class="l-h2">Testeremo un nuovo modo di stare insieme nelle scelte pubbliche.</h2>
+            <div class="l-grid" style="gap:40px;align-items:start;">
+                <div>
+                    <p class="l-p">Durante questa Winter School non testeremo solo un software. L'output finale sarà un modello decisionale "su misura" per Atena Lucana, capace di integrare le esigenze di chi vuole fare impresa con i valori di chi custodisce la memoria.</p>
+                    <p class="l-p">Il metodo AHP garantisce che nessuna voce venga ignorata e che le priorità emergano dal confronto strutturato — non dall'autorità o dalla maggioranza numerica.</p>
+                </div>
+                <div class="obj-dark">
+                    <h2 class="l-h2" style="font-size:1.5rem;margin-bottom:16px;">Cosa faremo ora</h2>
+                    <ul class="obj-list">
+                        <li>Simuleremo una scelta reale: <strong>Conservazione Storica vs Riqualificazione Moderna</strong></li>
+                        <li>Ognuno esprimerà la propria visione tramite la Bussola decisionale</li>
+                        <li>Analizzeremo insieme le divergenze per costruire una sintesi</li>
+                        <li>Leggeremo il Consistency Ratio: la coerenza dei giudizi è parte della valutazione</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA FINALE -->
+    <div class="final-cta">
+        <h2>Pronto a partecipare?</h2>
+        <p>Il Cruscotto è pronto a raccogliere la tua visione. La tua partecipazione contribuisce al risultato collettivo.</p>
+        <div class="cta-row" style="justify-content:center;">
+            <button class="btn-cta primary" onclick="openApp()"><i class="fas fa-compass"></i> Inizia il Percorso</button>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="ft-brand">Atena Compass</div>
+        <div class="ft-copy">
+            Sistema locale di Supporto alle Decisioni (AHP) — Analytic Hierarchy Process (Saaty, 1980)<br>
+            © 2026 Gianfranco Iovine &amp; Monica Langone<br>
+            Progetto sviluppato per la Winter School "Fare Impresa. Fare Comunità" — Comune di Atena Lucana
+        </div>
+    </footer>
+
+</div><!-- /landing -->
+
+
+<!-- ══════════════════════════════════════════════════════
+     APP OVERLAY — CRUSCOTTO AHP
+══════════════════════════════════════════════════════ -->
+<div id="app-overlay">
+
+    <!-- TOP BAR -->
+    <header id="app-topbar">
+        <div class="app-topbar-title">Atena <span>Compass</span></div>
+        <div class="app-topbar-meta">Bussola Decisionale · Vallo di Diano</div>
+        <div class="app-topbar-right">
+            <div id="app-status">
+                <div class="status-dot" id="status-dot"></div>
+                <span id="status-text">In attesa di valutazione</span>
+            </div>
+            <button id="btn-close-app" onclick="closeApp()">
+                <i class="fas fa-arrow-left"></i> Torna alla presentazione
+            </button>
+        </div>
+    </header>
+
+    <!-- BODY -->
+    <div id="app-body">
+
+        <!-- SIDEBAR -->
+        <aside id="app-sidebar">
+            <div class="app-brand">
+                <div class="app-brand-ring"><i class="fas fa-compass"></i></div>
+                <h2>Atena <span>Compass</span></h2>
+                <p class="app-brand-sub">Decision Support System</p>
+            </div>
+            <nav class="app-nav">
+                <button class="app-nav-btn active" id="nav-wizard" onclick="showAppSection('wizard')"><i class="fas fa-sliders-h"></i> Valutazione</button>
+                <button class="app-nav-btn" id="nav-results" onclick="showAppSection('results')"><i class="fas fa-chart-pie"></i> Dashboard</button>
+                <button class="app-nav-btn" id="nav-registro" onclick="showAppSection('registro')"><i class="fas fa-database"></i> Registro Audit</button>
+            </nav>
+            <div class="method-box">
+                <span class="method-tag">Metodologia</span>
+                <p><strong>AHP</strong> (Analytic Hierarchy Process, Saaty 1980) + <strong>Entropia di Shannon</strong> per l'indice di consenso collettivo.</p>
+                <p style="margin-top:9px;font-size:0.7rem;">CR ≤ 0.10 = coerenza accettabile · CR ≤ 0.15 = tollerabile · CR > 0.15 = rivedere i giudizi</p>
+                <div class="cr-badge" id="sidebar-cr">CR: —</div>
+            </div>
+            <div class="sidebar-ft">
+                <span>G. Iovine</span> · PhD · AHP/MCDA<br>Università della Tuscia · 2026
+            </div>
+        </aside>
+
+        <!-- MAIN -->
+        <div id="app-main">
+            <div id="app-progress-wrap"><div id="app-progress-bar"></div></div>
+            <div id="app-scroll">
+
+                <!-- ═══ WIZARD ═══ -->
+                <div id="section-wizard" class="app-section active">
+
+                    <!-- Step 0: Accreditamento -->
+                    <div class="wiz-step active" id="step-0">
+                        <div class="step-header">
+                            <span class="step-label">Fase 0 di 4 — Accreditamento</span>
+                            <h2>Chi stai valutando?</h2>
+                            <p>Identifica il partecipante per avviare la valutazione comparativa AHP.</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Identificativo Stakeholder</label>
+                            <input type="text" id="input-stakeholder" class="atena-input" placeholder="Nome o Ente di riferimento">
+                        </div>
+                        <div class="form-group">
+                            <label>Categoria di Appartenenza</label>
+                            <div class="role-grid">
+                                <div class="role-card sel" data-role="Cittadino" onclick="selectRole(this)"><i class="fas fa-user"></i><span>Cittadino</span></div>
+                                <div class="role-card" data-role="Amministratore" onclick="selectRole(this)"><i class="fas fa-landmark"></i><span>Amministratore</span></div>
+                                <div class="role-card" data-role="Operatore Economico" onclick="selectRole(this)"><i class="fas fa-briefcase"></i><span>Operatore</span></div>
+                                <div class="role-card" data-role="Tecnico" onclick="selectRole(this)"><i class="fas fa-cogs"></i><span>Tecnico</span></div>
+                            </div>
+                        </div>
+                        <div class="btn-row"><div></div><button class="btn-next" onclick="moveStep(1)">Inizia la Valutazione <i class="fas fa-arrow-right"></i></button></div>
+                    </div>
+
+                    <!-- Steps 1-3: Criteri -->
+                    <div class="wiz-step" id="step-1">
+                        <div class="step-header"><span class="step-label">Fase 1 di 4 — Priorità Strategiche · 1/3</span><h2>Confronto Criteri</h2><p>Quale criterio guida maggiormente la tua visione per Atena Lucana?</p></div>
+                        <div class="vs-arena"><div class="vs-label left" id="cl-0"></div><div class="vs-badge">VS</div><div class="vs-label right" id="cr-0"></div></div>
+                        <div class="slider-zone">
+                            <div class="slider-scale"><span>← Sinistra (9)</span><span>Uguale</span><span>Destra (9) →</span></div>
+                            <input type="range" class="ahp-slider" id="sc-0" min="-8" max="8" value="0" oninput="updateSlider('c',0)">
+                            <div class="slider-feedback" id="fb-c-0">Uguale Importanza</div>
+                            <p class="saaty-hint">Scala Saaty: 1=uguale · 3=moderata · 5=forte · 7=molto forte · 9=assoluta</p>
+                        </div>
+                        <div class="btn-row"><button class="btn-prev" onclick="moveStep(-1)"><i class="fas fa-arrow-left"></i> Indietro</button><button class="btn-next" onclick="moveStep(1)">Avanti <i class="fas fa-arrow-right"></i></button></div>
+                    </div>
+
+                    <div class="wiz-step" id="step-2">
+                        <div class="step-header"><span class="step-label">Fase 1 di 4 — Priorità Strategiche · 2/3</span><h2>Confronto Criteri</h2></div>
+                        <div class="vs-arena"><div class="vs-label left" id="cl-1"></div><div class="vs-badge">VS</div><div class="vs-label right" id="cr-1"></div></div>
+                        <div class="slider-zone">
+                            <div class="slider-scale"><span>← Sinistra (9)</span><span>Uguale</span><span>Destra (9) →</span></div>
+                            <input type="range" class="ahp-slider" id="sc-1" min="-8" max="8" value="0" oninput="updateSlider('c',1)">
+                            <div class="slider-feedback" id="fb-c-1">Uguale Importanza</div>
+                            <p class="saaty-hint">Scala Saaty: 1=uguale · 3=moderata · 5=forte · 7=molto forte · 9=assoluta</p>
+                        </div>
+                        <div class="btn-row"><button class="btn-prev" onclick="moveStep(-1)"><i class="fas fa-arrow-left"></i> Indietro</button><button class="btn-next" onclick="moveStep(1)">Avanti <i class="fas fa-arrow-right"></i></button></div>
+                    </div>
+
+                    <div class="wiz-step" id="step-3">
+                        <div class="step-header"><span class="step-label">Fase 1 di 4 — Priorità Strategiche · 3/3</span><h2>Confronto Criteri</h2></div>
+                        <div class="vs-arena"><div class="vs-label left" id="cl-2"></div><div class="vs-badge">VS</div><div class="vs-label right" id="cr-2"></div></div>
+                        <div class="slider-zone">
+                            <div class="slider-scale"><span>← Sinistra (9)</span><span>Uguale</span><span>Destra (9) →</span></div>
+                            <input type="range" class="ahp-slider" id="sc-2" min="-8" max="8" value="0" oninput="updateSlider('c',2)">
+                            <div class="slider-feedback" id="fb-c-2">Uguale Importanza</div>
+                            <p class="saaty-hint">Scala Saaty: 1=uguale · 3=moderata · 5=forte · 7=molto forte · 9=assoluta</p>
+                        </div>
+                        <div class="btn-row"><button class="btn-prev" onclick="moveStep(-1)"><i class="fas fa-arrow-left"></i> Indietro</button><button class="btn-next" onclick="moveStep(1)">Avanti <i class="fas fa-arrow-right"></i></button></div>
+                    </div>
+
+                    <!-- Steps 4-6: Alternative per criterio -->
+                    <div class="wiz-step" id="step-4">
+                        <div class="step-header"><span class="step-label">Fase 2 di 4 — Scenari per Criterio 1</span><h2>Performance Scenari</h2><p>Rispetto al criterio: <strong id="ctx-0" style="color:var(--accent);"></strong></p></div>
+                        <div class="vs-arena"><div class="vs-label left">Conservazione Storica</div><div class="vs-badge">VS</div><div class="vs-label right">Riqualificazione Moderna</div></div>
+                        <div class="slider-zone">
+                            <div class="slider-scale"><span>← Conservazione (9)</span><span>Uguale</span><span>Riqualificazione (9) →</span></div>
+                            <input type="range" class="ahp-slider" id="sa-0" min="-8" max="8" value="0" oninput="updateSlider('a',0)">
+                            <div class="slider-feedback" id="fb-a-0">Equivalenti</div>
+                            <p class="saaty-hint">Quale scenario performa meglio rispetto a questo criterio?</p>
+                        </div>
+                        <div class="btn-row"><button class="btn-prev" onclick="moveStep(-1)"><i class="fas fa-arrow-left"></i> Indietro</button><button class="btn-next" onclick="moveStep(1)">Avanti <i class="fas fa-arrow-right"></i></button></div>
+                    </div>
+
+                    <div class="wiz-step" id="step-5">
+                        <div class="step-header"><span class="step-label">Fase 3 di 4 — Scenari per Criterio 2</span><h2>Performance Scenari</h2><p>Rispetto al criterio: <strong id="ctx-1" style="color:var(--accent);"></strong></p></div>
+                        <div class="vs-arena"><div class="vs-label left">Conservazione Storica</div><div class="vs-badge">VS</div><div class="vs-label right">Riqualificazione Moderna</div></div>
+                        <div class="slider-zone">
+                            <div class="slider-scale"><span>← Conservazione (9)</span><span>Uguale</span><span>Riqualificazione (9) →</span></div>
+                            <input type="range" class="ahp-slider" id="sa-1" min="-8" max="8" value="0" oninput="updateSlider('a',1)">
+                            <div class="slider-feedback" id="fb-a-1">Equivalenti</div>
+                            <p class="saaty-hint">Quale scenario performa meglio rispetto a questo criterio?</p>
+                        </div>
+                        <div class="btn-row"><button class="btn-prev" onclick="moveStep(-1)"><i class="fas fa-arrow-left"></i> Indietro</button><button class="btn-next" onclick="moveStep(1)">Avanti <i class="fas fa-arrow-right"></i></button></div>
+                    </div>
+
+                    <div class="wiz-step" id="step-6">
+                        <div class="step-header"><span class="step-label">Fase 4 di 4 — Scenari per Criterio 3</span><h2>Performance Scenari</h2><p>Rispetto al criterio: <strong id="ctx-2" style="color:var(--accent);"></strong></p></div>
+                        <div class="vs-arena"><div class="vs-label left">Conservazione Storica</div><div class="vs-badge">VS</div><div class="vs-label right">Riqualificazione Moderna</div></div>
+                        <div class="slider-zone">
+                            <div class="slider-scale"><span>← Conservazione (9)</span><span>Uguale</span><span>Riqualificazione (9) →</span></div>
+                            <input type="range" class="ahp-slider" id="sa-2" min="-8" max="8" value="0" oninput="updateSlider('a',2)">
+                            <div class="slider-feedback" id="fb-a-2">Equivalenti</div>
+                            <p class="saaty-hint">Quale scenario performa meglio rispetto a questo criterio?</p>
+                        </div>
+                        <div class="btn-row"><button class="btn-prev" onclick="moveStep(-1)"><i class="fas fa-arrow-left"></i> Indietro</button><button class="btn-next" onclick="moveStep(1)">Calcola Risultati <i class="fas fa-calculator"></i></button></div>
+                    </div>
+
+                    <!-- Step 7: Conferma -->
+                    <div class="wiz-step" id="step-7">
+                        <div class="confirm-center">
+                            <div class="confirm-icon"><i class="fas fa-check-circle"></i></div>
+                            <h2>Valutazione Acquisita</h2>
+                            <p>I dati sono stati elaborati dal motore AHP.<br>Consulta i risultati o avvia una nuova valutazione.</p>
+                            <div class="btn-row" style="justify-content:center;gap:13px;">
+                                <button class="btn-prev" onclick="resetWizard()"><i class="fas fa-redo"></i> Nuova Valutazione</button>
+                                <button class="btn-next" onclick="showAppSection('results')">Vedi Dashboard <i class="fas fa-chart-pie"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div><!-- /section-wizard -->
+
+                <!-- ═══ DASHBOARD ═══ -->
+                <div id="section-results" class="app-section">
+                    <div class="dash-hdr">
+                        <h2><i class="fas fa-chart-pie" style="color:var(--accent);font-size:1.2rem;"></i> Dashboard Decisionale</h2>
+                        <p>Sintesi AHP aggregata in tempo reale su tutte le valutazioni della sessione</p>
+                    </div>
+                    <div class="stats-row">
+                        <div class="stat-card"><span class="stat-lbl">Partecipazioni</span><span class="stat-val" id="stat-count">0</span></div>
+                        <div class="stat-card"><span class="stat-lbl">CR Medio</span><span class="stat-val" id="stat-cr">—</span></div>
+                        <div class="stat-card"><span class="stat-lbl">Consenso Shannon</span><span class="stat-val" id="stat-shannon">—</span></div>
+                    </div>
+                    <div class="charts-row">
+                        <div class="chart-card"><h4><i class="fas fa-bullseye"></i> Scenario Preferito (aggregato)</h4><canvas id="chartDoughnut" height="200"></canvas></div>
+                        <div class="chart-card"><h4><i class="fas fa-project-diagram"></i> Mappa Criteri (radar)</h4><canvas id="chartRadar" height="200"></canvas></div>
+                    </div>
+                    <div class="weights-row"><h4><i class="fas fa-balance-scale"></i> Pesi Criteri (media sessione)</h4><div id="weights-bars"></div></div>
+                    <div class="interp-card"><h4><i class="fas fa-lightbulb"></i> Interpretazione Algoritmica</h4><div id="interpretation-box"><p>Completa almeno una valutazione per generare l'interpretazione.</p></div></div>
+                </div>
+
+                <!-- ═══ REGISTRO ═══ -->
+                <div id="section-registro" class="app-section">
+                    <div class="dash-hdr">
+                        <h2><i class="fas fa-database" style="color:var(--accent);font-size:1.2rem;"></i> Registro Audit</h2>
+                        <p>Log completo delle valutazioni della sessione corrente</p>
+                    </div>
+                    <div class="registro-wrap">
+                        <table class="registro-table">
+                            <thead><tr><th>Stakeholder</th><th>Categoria</th><th>Timestamp</th><th>CR</th><th>Scenario Preferito</th><th>Score</th></tr></thead>
+                            <tbody id="registro-tbody">
+                                <tr><td colspan="6" style="text-align:center;opacity:0.4;padding:30px;font-size:0.84rem;">Nessun dato — avvia una valutazione.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="registro-actions">
+                        <button class="btn-ghost" onclick="exportCSV()"><i class="fas fa-download"></i> Esporta CSV</button>
+                        <button class="btn-danger" onclick="clearSession()"><i class="fas fa-trash-alt"></i> Svuota Sessione</button>
+                    </div>
+                </div>
+
+            </div><!-- /app-scroll -->
+        </div><!-- /app-main -->
+    </div><!-- /app-body -->
+
+    <!-- MOBILE NAV -->
+    <nav id="mobile-nav">
+        <button class="mnav-btn active" id="mnav-wizard" onclick="showAppSection('wizard')"><i class="fas fa-sliders-h"></i><span>Valuta</span></button>
+        <button class="mnav-btn" id="mnav-results" onclick="showAppSection('results')"><i class="fas fa-chart-pie"></i><span>Dashboard</span></button>
+        <button class="mnav-btn" id="mnav-registro" onclick="showAppSection('registro')"><i class="fas fa-database"></i><span>Registro</span></button>
+    </nav>
+
+</div><!-- /app-overlay -->
+
+
+<script>
+/* ══════════════════════════════════════════
+   OVERLAY OPEN / CLOSE
+══════════════════════════════════════════ */
+window.openApp = function() {
+    document.getElementById('app-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+};
+window.closeApp = function() {
+    document.getElementById('app-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+};
+
+/* ══════════════════════════════════════════
+   MOTORE AHP
+══════════════════════════════════════════ */
+(function() {
+    const CRITERI = [
+        { nome:'Sostenibilità Economica', colore:'#e67e22' },
+        { nome:'Identità Storica',        colore:'#3498db' },
+        { nome:'Impatto Sociale',         colore:'#27ae60' },
+    ];
+    const ALTERNATIVE = [
+        { nome:'Conservazione Storica',    colore:'#3498db' },
+        { nome:'Riqualificazione Moderna', colore:'#e74c3c' },
+    ];
+    const PAIRS = [[0,1],[0,2],[1,2]];
+    const TOTAL = 8;
+
+    let currentStep = 0;
+    let selectedRole = 'Cittadino';
+    let sessionData = [];
+    let chartD = null, chartR = null;
+
+    // Popola etichette UI
+    PAIRS.forEach(([i,j], idx) => {
+        const l = document.getElementById(`cl-${idx}`);
+        const r = document.getElementById(`cr-${idx}`);
+        if (l) l.textContent = CRITERI[i].nome;
+        if (r) r.textContent = CRITERI[j].nome;
+    });
+    CRITERI.forEach((c, idx) => {
+        const el = document.getElementById(`ctx-${idx}`);
+        if (el) el.textContent = c.nome;
+    });
+
+    /* NAVIGAZIONE SEZIONI */
+    window.showAppSection = function(name) {
+        document.querySelectorAll('.app-section').forEach(s => s.classList.remove('active'));
+        document.getElementById('section-' + name).classList.add('active');
+        document.querySelectorAll('.app-nav-btn').forEach(b => b.classList.remove('active'));
+        const map = { wizard:'nav-wizard', results:'nav-results', registro:'nav-registro' };
+        document.getElementById(map[name])?.classList.add('active');
+        document.querySelectorAll('.mnav-btn').forEach(b => b.classList.remove('active'));
+        const mmap = { wizard:'mnav-wizard', results:'mnav-results', registro:'mnav-registro' };
+        document.getElementById(mmap[name])?.classList.add('active');
+        document.getElementById('app-scroll').scrollTop = 0;
+    };
+
+    /* NAVIGAZIONE STEP */
+    window.moveStep = function(n) {
+        if (n === 1 && currentStep === 0) {
+            const v = document.getElementById('input-stakeholder')?.value.trim();
+            if (!v) { alert('Inserisci un identificativo per continuare.'); return; }
+        }
+        const steps = document.querySelectorAll('#section-wizard .wiz-step');
+        if (currentStep+n < 0 || currentStep+n >= steps.length) return;
+        steps[currentStep].classList.remove('active');
+        currentStep += n;
+        steps[currentStep].classList.add('active');
+        document.getElementById('app-progress-bar').style.width = (currentStep/(TOTAL-1)*100)+'%';
+        document.getElementById('app-scroll').scrollTop = 0;
+        if (currentStep === TOTAL-1) computeAndSave();
+    };
+
+    /* SELEZIONE RUOLO */
+    window.selectRole = function(el) {
+        document.querySelectorAll('.role-card').forEach(c => c.classList.remove('sel'));
+        el.classList.add('sel');
+        selectedRole = el.dataset.role;
+    };
+
+    /* SLIDER */
+    window.updateSlider = function(type, idx) {
+        const inputId = type==='c' ? `sc-${idx}` : `sa-${idx}`;
+        const el = document.getElementById(inputId);
+        const fb = document.getElementById(`fb-${type}-${idx}`);
+        if (!el||!fb) return;
+        const val = parseInt(el.value);
+        const nA = type==='c' ? CRITERI[PAIRS[idx][0]].nome : ALTERNATIVE[0].nome;
+        const nB = type==='c' ? CRITERI[PAIRS[idx][1]].nome : ALTERNATIVE[1].nome;
+        if (val===0) fb.innerHTML='Uguale Importanza';
+        else if (val<0) fb.innerHTML=`<b>${nA}</b> prevale (intensità ${Math.abs(val)+1})`;
+        else fb.innerHTML=`<b>${nB}</b> prevale (intensità ${val+1})`;
+    };
+
+    /* AHP */
+    function getRI(n){ return({1:0,2:0,3:0.58,4:0.90,5:1.12,6:1.24,7:1.32,8:1.41,9:1.45,10:1.49})[n]??1.49; }
+    function buildMatrix(n, vals){
+        const m=Array.from({length:n},()=>Array(n).fill(1.0));
+        vals.forEach(({i,j,v})=>{
+            if(v<0){const s=Math.abs(v)+1;m[i][j]=s;m[j][i]=1/s;}
+            else if(v>0){const s=v+1;m[i][j]=1/s;m[j][i]=s;}
+        });
+        return m;
+    }
+    function ahpWeights(matrix){
+        const n=matrix.length;
+        const cs=Array(n).fill(0);
+        for(let j=0;j<n;j++) for(let i=0;i<n;i++) cs[j]+=matrix[i][j];
+        const w=[];
+        for(let i=0;i<n;i++){let s=0;for(let j=0;j<n;j++) s+=cs[j]>0?matrix[i][j]/cs[j]:1/n;w.push(s/n);}
+        let lm=0;
+        w.forEach((wi,i)=>{let row=0;for(let j=0;j<n;j++) row+=matrix[i][j]*w[j];if(wi>0)lm+=row/wi;});
+        lm/=n;
+        const CI=(lm-n)/(n-1);
+        const CR=n<=2?0:CI/getRI(n);
+        return{weights:w,CR:Math.max(0,CR)};
+    }
+
+    /* CALCOLO */
+    function computeAndSave(){
+        const stakeholder=document.getElementById('input-stakeholder')?.value.trim()||'Anonimo';
+        const cVals=PAIRS.map(([i,j],idx)=>({i,j,v:parseInt(document.getElementById(`sc-${idx}`)?.value||0)}));
+        const cRes=ahpWeights(buildMatrix(CRITERI.length,cVals));
+        const aVals=CRITERI.map((_,idx)=>({i:0,j:1,v:parseInt(document.getElementById(`sa-${idx}`)?.value||0)}));
+        const scores=Array(ALTERNATIVE.length).fill(0);
+        CRITERI.forEach((_,ci)=>{
+            const aR=ahpWeights(buildMatrix(ALTERNATIVE.length,[aVals[ci]]));
+            aR.weights.forEach((w,ai)=>scores[ai]+=w*cRes.weights[ci]);
+        });
+        const ts=new Date().toLocaleDateString('it-IT')+' '+new Date().toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});
+        sessionData.push({stakeholder,ruolo:selectedRole,timestamp:ts,pesi:cRes.weights,scores,CR:cRes.CR});
+
+        const cr=cRes.CR;
+        const badge=document.getElementById('sidebar-cr');
+        badge.textContent='CR: '+cr.toFixed(3);
+        badge.style.borderColor=cr<=0.1?'#27ae60':cr<=0.15?'#e67e22':'#e74c3c';
+        badge.style.color=cr<=0.1?'#27ae60':cr<=0.15?'#e67e22':'#e74c3c';
+        document.getElementById('status-dot').classList.add('s-active');
+        document.getElementById('status-text').textContent=`${sessionData.length} valutazione${sessionData.length>1?'i':''} acquisita${sessionData.length>1?'':''}`;
+        updateDashboard(); updateRegistro();
+    }
+
+    /* DASHBOARD */
+    function updateDashboard(){
+        if(!sessionData.length) return;
+        document.getElementById('stat-count').textContent=sessionData.length;
+        const avgCR=sessionData.reduce((s,d)=>s+d.CR,0)/sessionData.length;
+        const crEl=document.getElementById('stat-cr');
+        crEl.textContent=avgCR.toFixed(3);
+        crEl.style.color=avgCR<=0.1?'#27ae60':avgCR<=0.15?'#e67e22':'#e74c3c';
+        const ag=Array(ALTERNATIVE.length).fill(0);
+        sessionData.forEach(d=>d.scores.forEach((s,i)=>ag[i]+=s));
+        const tot=ag.reduce((a,b)=>a+b,0)||1;
+        const norm=ag.map(s=>s/tot);
+        let hAct=0;
+        norm.forEach(p=>{if(p>0)hAct-=p*Math.log2(p);});
+        const hMax=Math.log2(ALTERNATIVE.length);
+        const sh=hMax>0?(1-hAct/hMax)*100:100;
+        const shEl=document.getElementById('stat-shannon');
+        shEl.textContent=sh.toFixed(1)+'%';
+        shEl.style.color=sh>50?'#27ae60':'#e67e22';
+        const agC=Array(CRITERI.length).fill(0);
+        sessionData.forEach(d=>d.pesi.forEach((p,i)=>agC[i]+=p));
+        const normC=agC.map(v=>v/sessionData.length);
+
+        if(chartD) chartD.destroy();
+        chartD=new Chart(document.getElementById('chartDoughnut'),{
+            type:'doughnut',
+            data:{labels:ALTERNATIVE.map(a=>a.nome),datasets:[{data:norm.map(s=>(s*100).toFixed(1)),backgroundColor:ALTERNATIVE.map(a=>a.colore),borderWidth:0}]},
+            options:{maintainAspectRatio:false,cutout:'72%',plugins:{legend:{position:'bottom',labels:{padding:14}}}}
+        });
+        if(chartR) chartR.destroy();
+        chartR=new Chart(document.getElementById('chartRadar'),{
+            type:'radar',
+            data:{labels:CRITERI.map(c=>c.nome),datasets:[{label:'Pesi Medi',data:normC.map(v=>parseFloat(v.toFixed(3))),borderColor:'#C5A059',backgroundColor:'rgba(197,160,89,0.15)',pointBackgroundColor:'#C5A059',borderWidth:3,pointRadius:5}]},
+            options:{maintainAspectRatio:false,scales:{r:{beginAtZero:true,max:1,ticks:{display:false},pointLabels:{font:{size:11,weight:'bold'}}}},plugins:{legend:{display:false}}}
+        });
+
+        const barsEl=document.getElementById('weights-bars');
+        barsEl.innerHTML='';
+        const barColors=['#e67e22','#3498db','#27ae60'];
+        CRITERI.forEach((c,i)=>{
+            const pct=(normC[i]*100).toFixed(1);
+            barsEl.innerHTML+=`<div class="weight-bar-row"><div class="weight-bar-label"><span>${c.nome}</span><span>${pct}%</span></div><div class="weight-bar-track"><div class="weight-bar-fill" style="width:${pct}%;background:${barColors[i]};"></div></div></div>`;
+        });
+
+        const wIdx=norm.indexOf(Math.max(...norm));
+        const tCIdx=normC.indexOf(Math.max(...normC));
+        document.getElementById('interpretation-box').innerHTML=`
+            <p>Con <strong>${sessionData.length} valutazione${sessionData.length>1?'i':''}</strong>, lo scenario
+            <strong style="color:${ALTERNATIVE[wIdx].colore}">${ALTERNATIVE[wIdx].nome}</strong>
+            emerge come preferito con un peso aggregato del <strong>${(norm[wIdx]*100).toFixed(1)}%</strong>.</p>
+            <p>Il criterio più determinante è <strong>${CRITERI[tCIdx].nome}</strong>
+            (peso medio: ${(normC[tCIdx]*100).toFixed(1)}%). Consenso Shannon: <strong>${sh.toFixed(1)}%</strong> —
+            ${sh>50?'la comunità esprime una direzione comune e coerente.':'le visioni sono ancora divergenti: raccogliere altri dati.'}</p>
+            <p style="margin-top:4px;font-size:0.8rem;opacity:0.6;">CR medio di sessione: ${avgCR.toFixed(3)} ${avgCR<=0.1?'✓ Coerenza accettabile':'⚠ Verificare la coerenza dei giudizi'}.</p>`;
+    }
+
+    /* REGISTRO */
+    function updateRegistro(){
+        const tbody=document.getElementById('registro-tbody');
+        if(!tbody) return;
+        tbody.innerHTML='';
+        if(!sessionData.length){
+            tbody.innerHTML='<tr><td colspan="6" style="text-align:center;opacity:0.4;padding:30px;font-size:0.84rem;">Nessun dato — avvia una valutazione.</td></tr>';
+            return;
+        }
+        [...sessionData].reverse().forEach(d=>{
+            const wi=d.scores.indexOf(Math.max(...d.scores));
+            const cc=d.CR<=0.1?'cr-ok':d.CR<=0.15?'cr-warn':'cr-err';
+            const score=(d.scores[wi]*100).toFixed(1);
+            tbody.innerHTML+=`<tr>
+                <td><strong>${d.stakeholder}</strong></td>
+                <td><span class="badge-role">${d.ruolo}</span></td>
+                <td style="color:#999;font-size:0.76rem;">${d.timestamp}</td>
+                <td><span class="${cc}">${d.CR.toFixed(4)}</span></td>
+                <td><strong>${ALTERNATIVE[wi].nome}</strong></td>
+                <td style="font-family:'Fira Code',monospace;font-size:0.78rem;">${score}%</td>
+            </tr>`;
+        });
+    }
+
+    /* RESET */
+    window.resetWizard=function(){
+        currentStep=0;
+        document.getElementById('input-stakeholder').value='';
+        document.querySelectorAll('.ahp-slider').forEach(s=>s.value=0);
+        document.querySelectorAll('[id^="fb-"]').forEach(f=>f.innerHTML=f.id.includes('-a-')?'Equivalenti':'Uguale Importanza');
+        document.querySelectorAll('#section-wizard .wiz-step').forEach((s,i)=>s.classList.toggle('active',i===0));
+        document.querySelectorAll('.role-card').forEach(c=>c.classList.remove('sel'));
+        document.querySelector('.role-card[data-role="Cittadino"]').classList.add('sel');
+        selectedRole='Cittadino';
+        document.getElementById('app-progress-bar').style.width='0%';
+        document.getElementById('app-scroll').scrollTop=0;
+        showAppSection('wizard');
+    };
+
+    /* SVUOTA */
+    window.clearSession=function(){
+        if(!sessionData.length) return;
+        if(!confirm('Svuotare tutti i dati della sessione corrente?')) return;
+        sessionData=[];
+        updateRegistro();
+        document.getElementById('stat-count').textContent='0';
+        document.getElementById('stat-cr').textContent='—';
+        document.getElementById('stat-shannon').textContent='—';
+        document.getElementById('weights-bars').innerHTML='';
+        document.getElementById('interpretation-box').innerHTML='<p>Completa almeno una valutazione per generare l\'interpretazione.</p>';
+        if(chartD){chartD.destroy();chartD=null;}
+        if(chartR){chartR.destroy();chartR=null;}
+        const badge=document.getElementById('sidebar-cr');
+        badge.textContent='CR: —';badge.style.borderColor='';badge.style.color='';
+        document.getElementById('status-dot').classList.remove('s-active');
+        document.getElementById('status-text').textContent='In attesa di valutazione';
+    };
+
+    /* EXPORT CSV */
+    window.exportCSV=function(){
+        if(!sessionData.length){alert('Nessun dato da esportare.');return;}
+        const header='Stakeholder,Categoria,Timestamp,CR,'+CRITERI.map(c=>`Peso_${c.nome.replace(/,/g,'')}`).join(',')+','+ALTERNATIVE.map(a=>`Score_${a.nome.replace(/,/g,'')}`).join(',')+',Preferenza';
+        const rows=sessionData.map(d=>{
+            const wi=d.scores.indexOf(Math.max(...d.scores));
+            return[`"${d.stakeholder}"`,`"${d.ruolo}"`,`"${d.timestamp}"`,d.CR.toFixed(4),...d.pesi.map(p=>p.toFixed(4)),...d.scores.map(s=>s.toFixed(4)),`"${ALTERNATIVE[wi].nome}"`].join(',');
+        });
+        const csv=[header,...rows].join('\n');
+        const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+        const url=URL.createObjectURL(blob);
+        const a=document.createElement('a');a.href=url;
+        a.download=`atena_compass_${new Date().toISOString().slice(0,10)}.csv`;
+        a.click();URL.revokeObjectURL(url);
+    };
+
+    // init registro vuoto
+    updateRegistro();
+
+})();
+</script>
+</body>
+</html>
