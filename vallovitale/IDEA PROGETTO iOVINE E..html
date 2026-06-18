@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vallo Vitale — Cooperativa di Comunità</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --inchiostro:  #1A1410;
+    --terra:       #7A3B1E;
+    --ocra:        #B5842A;
+    --pietra:      #4A4035;
+    --salvia:      #3D5C3A;
+    --pergamena:   #F5F0E8;
+    --crema:       #FAF7F2;
+    --nebbia:      #E8E2D8;
+    --grigio:      #7A7060;
+    --oro:         #C4922A;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--crema);
+    color: var(--inchiostro);
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  /* ── GRAIN OVERLAY ─────────────────────────────── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 1000; opacity: 0.5;
+  }
+
+  /* ── TYPOGRAPHY ────────────────────────────────── */
+  .cinzel { font-family: 'Cinzel', serif; letter-spacing: 0.08em; }
+
+  h1, h2, h3 { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 400; }
+
+  .display {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    font-weight: 300;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+  }
+
+  .display-sm {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 300;
+    line-height: 1.1;
+  }
+
+  .label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ocra);
+  }
+
+  p { margin-bottom: 1.2em; }
+  p:last-child { margin-bottom: 0; }
+
+  /* ── ORNAMENTI ─────────────────────────────────── */
+  .ornament {
+    display: block;
+    text-align: center;
+    color: var(--ocra);
+    font-size: 1.2rem;
+    letter-spacing: 0.5em;
+    margin: 2rem auto;
+    opacity: 0.7;
+  }
+
+  .rule {
+    border: none;
+    border-top: 1px solid var(--ocra);
+    opacity: 0.35;
+    margin: 2rem 0;
+  }
+
+  .rule-thick {
+    border: none;
+    border-top: 2px solid var(--terra);
+    opacity: 0.6;
+    margin: 0;
+  }
+
+  /* ── HERO ──────────────────────────────────────── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    background: var(--salvia);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 5rem 4rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-left::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(26,20,16,0.3) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .hero-right {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-right img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center;
+    filter: sepia(20%) contrast(1.05);
+  }
+
+  .hero-right::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, var(--salvia) 0%, transparent 30%);
+  }
+
+  .hero-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    color: rgba(245,240,232,0.6);
+    margin-bottom: 2rem;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 300;
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    line-height: 0.92;
+    color: var(--pergamena);
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--ocra);
+  }
+
+  .hero-subtitle {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 1.1rem;
+    color: rgba(245,240,232,0.75);
+    line-height: 1.6;
+    max-width: 380px;
+    margin-bottom: 3rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-meta {
+    font-family: 'Cinzel', serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.18em;
+    color: rgba(245,240,232,0.5);
+    border-top: 1px solid rgba(245,240,232,0.2);
+    padding-top: 1.5rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-kpi {
+    position: absolute;
+    bottom: 3rem;
+    right: 3rem;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .kpi-card {
+    background: rgba(26,20,16,0.82);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(181,132,42,0.3);
+    border-left: 3px solid var(--ocra);
+    padding: 1rem 1.4rem;
+    min-width: 200px;
+  }
+
+  .kpi-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    font-weight: 300;
+    color: var(--ocra);
+    line-height: 1;
+    display: block;
+  }
+
+  .kpi-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+    color: rgba(245,240,232,0.6);
+    display: block;
+    margin-top: 0.3rem;
+  }
+
+  /* ── SEZIONI ───────────────────────────────────── */
+  .section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 6rem 3rem;
+  }
+
+  .section-wide {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 6rem 3rem;
+  }
+
+  .section-dark {
+    background: var(--inchiostro);
+    color: var(--pergamena);
+  }
+
+  .section-stone {
+    background: var(--nebbia);
+  }
+
+  .section-terra {
+    background: var(--terra);
+    color: var(--pergamena);
+  }
+
+  /* ── PROBLEMA ──────────────────────────────────── */
+  .paradox {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    margin-top: 4rem;
+  }
+
+  .paradox-side {
+    position: relative;
+    padding: 2.5rem;
+  }
+
+  .paradox-side::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+  }
+
+  .paradox-side.left::before { background: var(--terra); }
+  .paradox-side.right::before { background: var(--salvia); }
+
+  .paradox-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 6rem;
+    font-weight: 300;
+    line-height: 1;
+    opacity: 0.08;
+    position: absolute;
+    top: -1rem;
+    right: 1rem;
+    color: var(--inchiostro);
+  }
+
+  /* ── QUOTE GRANDE ──────────────────────────────── */
+  .grande-quote {
+    text-align: center;
+    padding: 8rem 4rem;
+    position: relative;
+  }
+
+  .grande-quote blockquote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.4;
+    color: var(--pergamena);
+    max-width: 780px;
+    margin: 0 auto 2rem;
+    position: relative;
+  }
+
+  .grande-quote blockquote::before {
+    content: '\201C';
+    font-size: 8rem;
+    color: var(--ocra);
+    opacity: 0.25;
+    position: absolute;
+    top: -2rem;
+    left: -2rem;
+    font-family: 'Cormorant Garamond', serif;
+    line-height: 1;
+  }
+
+  /* ── SERVIZI ───────────────────────────────────── */
+  .servizi-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+    margin-top: 0;
+  }
+
+  .servizio {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .servizio-img {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    object-position: center;
+    filter: sepia(15%) contrast(1.05);
+    display: block;
+    transition: transform 0.8s ease;
+  }
+
+  .servizio:hover .servizio-img { transform: scale(1.04); }
+
+  .servizio-overlay {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(to top, rgba(26,20,16,0.92) 0%, transparent 100%);
+    padding: 2.5rem 2rem 2rem;
+  }
+
+  .servizio-num {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    color: var(--ocra);
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .servizio-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: var(--pergamena);
+    line-height: 1.2;
+  }
+
+  /* ── DETAIL SERVIZIO ───────────────────────────── */
+  .servizio-detail {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    min-height: 500px;
+  }
+
+  .servizio-detail-img {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .servizio-detail-img img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: sepia(15%) contrast(1.05);
+  }
+
+  .servizio-detail-content {
+    padding: 5rem 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .servizio-detail-content.dark {
+    background: var(--inchiostro);
+    color: var(--pergamena);
+  }
+
+  .servizio-detail-content.stone {
+    background: var(--nebbia);
+  }
+
+  .servizio-detail-content.terra {
+    background: var(--terra);
+    color: var(--pergamena);
+  }
+
+  /* ── BULLET ELEGANTE ───────────────────────────── */
+  .elegant-list {
+    list-style: none;
+    margin: 1.5rem 0;
+  }
+
+  .elegant-list li {
+    padding: 0.6rem 0 0.6rem 1.5rem;
+    position: relative;
+    border-bottom: 1px solid rgba(181,132,42,0.15);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .elegant-list li:last-child { border-bottom: none; }
+
+  .elegant-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--ocra);
+    font-weight: 300;
+  }
+
+  /* ── NUMERI GRANDI ─────────────────────────────── */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border-top: 1px solid rgba(245,240,232,0.15);
+    border-bottom: 1px solid rgba(245,240,232,0.15);
+    margin: 4rem 0;
+  }
+
+  .stat-item {
+    padding: 3rem 2rem;
+    text-align: center;
+    border-right: 1px solid rgba(245,240,232,0.12);
+  }
+
+  .stat-item:last-child { border-right: none; }
+
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.5rem;
+    font-weight: 300;
+    color: var(--ocra);
+    display: block;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-desc {
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+    color: rgba(245,240,232,0.55);
+    text-transform: uppercase;
+    line-height: 1.6;
+  }
+
+  /* ── PERCHÉ DISRUTTIVA ─────────────────────────── */
+  .disruption-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 3rem;
+    margin-top: 4rem;
+  }
+
+  .disruption-card {
+    position: relative;
+    padding: 2.5rem 0;
+    border-top: 2px solid var(--ocra);
+  }
+
+  .disruption-letter {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 5rem;
+    font-weight: 300;
+    color: var(--ocra);
+    opacity: 0.2;
+    position: absolute;
+    top: -1.5rem;
+    right: 0;
+    line-height: 1;
+  }
+
+  .disruption-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: var(--inchiostro);
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  .disruption-body {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--pietra);
+  }
+
+  /* ── TIMELINE ──────────────────────────────────── */
+  .timeline {
+    position: relative;
+    padding: 3rem 0;
+    margin-top: 3rem;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 120px;
+    top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, var(--ocra) 10%, var(--ocra) 90%, transparent);
+    opacity: 0.4;
+  }
+
+  .timeline-item {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 3rem;
+    margin-bottom: 3.5rem;
+    position: relative;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: 112px;
+    top: 0.4rem;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--crema);
+    border: 2px solid var(--ocra);
+    z-index: 2;
+  }
+
+  .timeline-period {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    color: var(--ocra);
+    text-align: right;
+    padding-top: 0.2rem;
+  }
+
+  .timeline-content h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--inchiostro);
+  }
+
+  .timeline-content p {
+    font-size: 0.92rem;
+    color: var(--pietra);
+    line-height: 1.65;
+    margin-bottom: 0;
+  }
+
+  /* ── DEAL ──────────────────────────────────────── */
+  .deal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    margin-top: 4rem;
+  }
+
+  .deal-side h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    margin-bottom: 2rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid currentColor;
+    opacity: 0.6;
+  }
+
+  .deal-item {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    align-items: start;
+  }
+
+  .deal-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--ocra);
+    line-height: 1;
+  }
+
+  .deal-text strong {
+    display: block;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    font-weight: 500;
+    margin-bottom: 0.3rem;
+  }
+
+  .deal-text p {
+    font-size: 0.88rem;
+    line-height: 1.6;
+    opacity: 0.75;
+    margin: 0;
+  }
+
+  /* ── BUDGET TABLE ──────────────────────────────── */
+  .budget-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2rem;
+    font-size: 0.9rem;
+  }
+
+  .budget-table thead tr {
+    border-bottom: 2px solid var(--ocra);
+  }
+
+  .budget-table th {
+    font-family: 'Cinzel', serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.15em;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    color: var(--ocra);
+  }
+
+  .budget-table td {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid rgba(181,132,42,0.12);
+    color: var(--pietra);
+    vertical-align: top;
+  }
+
+  .budget-table tr:last-child td {
+    border-bottom: 2px solid var(--terra);
+    font-weight: 500;
+    color: var(--inchiostro);
+  }
+
+  .budget-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+
+  /* ── FOOTER / CTA ──────────────────────────────── */
+  .cta-section {
+    background: var(--inchiostro);
+    color: var(--pergamena);
+    padding: 8rem 4rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-section::before {
+    content: 'VALLO\AVITALE';
+    position: absolute;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20rem;
+    font-weight: 300;
+    color: white;
+    opacity: 0.02;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    pointer-events: none;
+    letter-spacing: -0.05em;
+  }
+
+  .cta-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 300;
+    font-style: italic;
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-body {
+    font-size: 1rem;
+    max-width: 580px;
+    margin: 0 auto 3rem;
+    opacity: 0.7;
+    position: relative;
+    z-index: 1;
+    line-height: 1.8;
+  }
+
+  .cta-promotore {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--ocra);
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── ANIMAZIONI ────────────────────────────────── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-up {
+    opacity: 0;
+    animation: fadeUp 0.9s ease forwards;
+  }
+
+  .fade-up:nth-child(1) { animation-delay: 0.1s; }
+  .fade-up:nth-child(2) { animation-delay: 0.3s; }
+  .fade-up:nth-child(3) { animation-delay: 0.5s; }
+  .fade-up:nth-child(4) { animation-delay: 0.7s; }
+
+  /* ── RESPONSIVE ────────────────────────────────── */
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { height: 50vh; }
+    .hero-kpi { position: static; flex-direction: row; flex-wrap: wrap; padding: 2rem; background: var(--inchiostro); }
+    .paradox, .deal-grid, .disruption-grid, .servizi-grid { grid-template-columns: 1fr; }
+    .stat-row { grid-template-columns: 1fr 1fr; }
+    .servizio-detail { grid-template-columns: 1fr; }
+    .servizio-detail-img { height: 300px; }
+    .section, .section-wide { padding: 4rem 1.5rem; }
+    .timeline::before { left: 80px; }
+    .timeline-item { grid-template-columns: 80px 1fr; }
+    .timeline-item::before { left: 72px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════
+     HERO
+════════════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow fade-up">VALLO DI DIANO · AREA INTERNA · CAMPANIA · 2026</p>
+    <h1 class="hero-title fade-up">
+      Vallo<br><em>Vitale</em>
+    </h1>
+    <p class="hero-subtitle fade-up">
+      Una Cooperativa di Comunità che trasforma il sapere degli anziani in economia reale, trattiene i giovani e usa i fondi pubblici per quello per cui esistono.
+    </p>
+    <p class="hero-meta fade-up">
+      PROMOTORE: ING. EMANUELE IOVINE · INGEGNERE CIVILE<br>
+      PARTNER: PROTEZIONE CIVILE DI SASSANO · GRUPPO LUCANO · RETI LOCALI
+    </p>
+  </div>
+  <div class="hero-right">
+    <img
+      src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1200&q=80"
+      alt="Paesaggio Cilento"
+    >
+    <div class="hero-kpi">
+      <div class="kpi-card">
+        <span class="kpi-number">€ 600k</span>
+        <span class="kpi-label">Contributo massimo<br>bando attivo 2026</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-number">20+</span>
+        <span class="kpi-label">Posti lavoro<br>residenti locali</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-number">Zero €</span>
+        <span class="kpi-label">Costo reale<br>per il Comune</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     IL PARADOSSO
+════════════════════════════════════════════════════════ -->
+<div>
+  <section class="section">
+    <p class="label">Il Contesto</p>
+    <h2 class="display-sm" style="margin-top:0.5rem; margin-bottom:1.5rem; color:var(--inchiostro);">
+      Il Vallo di Diano ha due problemi<br>che si risolvono a vicenda.
+    </h2>
+    <p style="max-width:640px; color:var(--pietra); font-size:1rem;">
+      Non mancano i fondi. Non mancano le persone. Manca il soggetto locale capace di connettere entrambi in modo strutturale, duraturo, e radicato nel territorio.
+    </p>
+
+    <div class="paradox">
+      <div class="paradox-side left">
+        <span class="paradox-num">I</span>
+        <p class="label">Primo problema</p>
+        <h3 style="font-size:1.5rem; margin:0.75rem 0; line-height:1.2;">Un capitale umano che si disperde</h3>
+        <p style="font-size:0.95rem; color:var(--pietra);">
+          Centinaia di anziani attivi — 65–75 anni — che hanno smesso di lavorare ufficialmente ma non hanno smesso di sapere. Muratori a secco, erboristi, pastori, agricoltori, guardaboschi, ex maestre, geometri. Un sapere territoriale irriproducibile che oggi resta inutilizzato e che sparirà nel giro di un decennio senza lasciare traccia.
+        </p>
+      </div>
+      <div class="paradox-side right">
+        <span class="paradox-num">II</span>
+        <p class="label">Secondo problema</p>
+        <h3 style="font-size:1.5rem; margin:0.75rem 0; line-height:1.2;">Fondi che tornano indietro non spesi</h3>
+        <p style="font-size:0.95rem; color:var(--pietra);">
+          Il Vallo è classificato Area Interna e riceve finanziamenti significativi — PSR, PNRR, FESR. Ma una parte torna indietro ogni anno perché manca un soggetto locale capace di progettare, gestire e rendicontare interventi concreti. I soldi ci sono. La capacità di usarli, spesso no.
+        </p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     GRANDE QUOTE
+════════════════════════════════════════════════════════ -->
+<div class="section-dark">
+  <div class="grande-quote">
+    <p class="label" style="color:var(--ocra); margin-bottom:2rem;">La Risposta</p>
+    <blockquote>
+      Una Cooperativa di Comunità che trasforma gli anziani attivi in lavoratori qualificati su servizi reali — non folklore, non turismo, non assistenzialismo. Economia.
+    </blockquote>
+    <span class="ornament">· · ·</span>
+    <p style="color:rgba(245,240,232,0.55); font-size:0.9rem; font-style:italic; max-width:500px; margin:0 auto;">
+      Il modello non dipende dalla nostalgia. Vende competenze reali al mercato reale. Gli anziani non sono un'attrazione — sono lavoratori qualificati in settori dove non hanno concorrenza.
+    </p>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     TRE SERVIZI — HERO VISIVO
+════════════════════════════════════════════════════════ -->
+<div class="servizi-grid">
+  <div class="servizio">
+    <img class="servizio-img"
+      src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=800&q=80"
+      alt="Presidio Territoriale">
+    <div class="servizio-overlay">
+      <span class="servizio-num">SERVIZIO I</span>
+      <h3 class="servizio-title">Presidio<br>Territoriale</h3>
+    </div>
+  </div>
+  <div class="servizio">
+    <img class="servizio-img"
+      src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80"
+      alt="Manutenzione Paesaggio">
+    <div class="servizio-overlay">
+      <span class="servizio-num">SERVIZIO II</span>
+      <h3 class="servizio-title">Manutenzione<br>del Paesaggio</h3>
+    </div>
+  </div>
+  <div class="servizio">
+    <img class="servizio-img"
+      src="https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?w=800&q=80"
+      alt="Welfare di Prossimità">
+    <div class="servizio-overlay">
+      <span class="servizio-num">SERVIZIO III</span>
+      <h3 class="servizio-title">Welfare<br>di Prossimità</h3>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     SERVIZIO I — DETTAGLIO
+════════════════════════════════════════════════════════ -->
+<div class="servizio-detail">
+  <div class="servizio-detail-img">
+    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=900&q=80" alt="Territorio">
+  </div>
+  <div class="servizio-detail-content stone">
+    <p class="label">Servizio I</p>
+    <h2 style="font-size:2.2rem; margin:0.75rem 0 1.5rem; line-height:1.1;">Presidio e Conoscenza del Territorio</h2>
+    <p style="font-size:0.95rem; color:var(--pietra); margin-bottom:1.5rem;">
+      Il Parco Nazionale del Cilento copre 181.048 ettari con un organico insufficiente. I Comuni hanno obblighi di monitoraggio PAI che non riescono a rispettare. La Protezione Civile coordina le emergenze ma non ha struttura per la prevenzione quotidiana.
+    </p>
+    <ul class="elegant-list">
+      <li>Monitoraggio idrogeologico e segnalazione anomalie su protocollo standardizzato</li>
+      <li>Schede digitali georeferenziate compilate dagli anziani-soci sulla loro area di competenza</li>
+      <li>Piattaforma dati condivisa con PC Sassano — primo cliente già disponibile</li>
+      <li>Presidio sentieristico e biodiversità per il Parco Nazionale</li>
+    </ul>
+    <hr class="rule">
+    <p style="font-size:0.85rem; color:var(--grigio); font-style:italic;">
+      Mercato: Comuni (budget PAI esistente €15–40k/anno), Parco Nazionale, Regione Campania (fondi FESR prevenzione), compagnie assicurative
+    </p>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     SERVIZIO II — DETTAGLIO
+════════════════════════════════════════════════════════ -->
+<div class="servizio-detail" style="direction:rtl;">
+  <div class="servizio-detail-img" style="direction:ltr;">
+    <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=900&q=80" alt="Muretti a secco">
+  </div>
+  <div class="servizio-detail-content dark" style="direction:ltr;">
+    <p class="label">Servizio II</p>
+    <h2 style="font-size:2.2rem; margin:0.75rem 0 1.5rem; line-height:1.1; color:var(--pergamena);">Manutenzione del Paesaggio Rurale</h2>
+    <p style="font-size:0.95rem; color:rgba(245,240,232,0.7); margin-bottom:1.5rem;">
+      La muratura a secco è iscritta nel patrimonio immateriale UNESCO dal 2018. Il Vallo ha migliaia di chilometri di muretti, terrazzamenti e sentieri in pietra calcarea che cadono a pezzi. I fondi per restaurarli esistono. Mancano gli esecutori certificati.
+    </p>
+    <ul class="elegant-list" style="--ocra:#C4922A;">
+      <li style="border-bottom-color:rgba(196,146,42,0.2); color:rgba(245,240,232,0.8);">Squadre miste: 2 anziani esperti + 1–2 giovani apprendisti per cantiere</li>
+      <li style="border-bottom-color:rgba(196,146,42,0.2); color:rgba(245,240,232,0.8);">Direzione lavori e certificazione tecnica: Ing. Iovine</li>
+      <li style="border-bottom-color:rgba(196,146,42,0.2); color:rgba(245,240,232,0.8);">Archivio georeferenziato del paesaggio rurale del Vallo</li>
+      <li style="border-bottom-color:rgba(196,146,42,0.2); color:rgba(245,240,232,0.8);">Formazione certificata: i giovani diventano esecutori autonomi in 2–3 anni</li>
+    </ul>
+    <hr class="rule" style="border-color:rgba(245,240,232,0.15);">
+    <p style="font-size:0.85rem; color:rgba(245,240,232,0.45); font-style:italic;">
+      Mercato: PSR Campania fino al 100% per enti pubblici · Privati proprietari terreni · Comuni · Fondi PNRR borghi storici. Zero concorrenza reale sul territorio.
+    </p>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     SERVIZIO III — DETTAGLIO
+════════════════════════════════════════════════════════ -->
+<div class="servizio-detail">
+  <div class="servizio-detail-img">
+    <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=900&q=80" alt="Cura anziani">
+  </div>
+  <div class="servizio-detail-content terra">
+    <p class="label" style="color:rgba(245,240,232,0.7);">Servizio III</p>
+    <h2 style="font-size:2.2rem; margin:0.75rem 0 1.5rem; line-height:1.1; color:var(--pergamena);">Welfare di Prossimità</h2>
+    <p style="font-size:0.95rem; color:rgba(245,240,232,0.8); margin-bottom:1.5rem;">
+      Un anziano attivo di 68 anni che si prende cura di un anziano fragile di 84 anni che conosce da cinquant'anni. Nessun operatore esterno può replicare questa qualità di relazione, a questo costo.
+    </p>
+    <ul class="elegant-list">
+      <li style="border-bottom-color:rgba(245,240,232,0.2); color:rgba(245,240,232,0.85);">Livello base: visite quotidiane, compagnia, commissioni, segnalazione anomalie</li>
+      <li style="border-bottom-color:rgba(245,240,232,0.2); color:rgba(245,240,232,0.85);">Abbonamento famiglie diaspora €150–300/mese — report settimanale, gestione emergenze</li>
+      <li style="border-bottom-color:rgba(245,240,232,0.2); color:rgba(245,240,232,0.85);">Convenzioni ASL Salerno per ADI (Assistenza Domiciliare Integrata)</li>
+      <li style="border-bottom-color:rgba(245,240,232,0.2); color:rgba(245,240,232,0.85);">Voucher INPS caregiver: strumenti già esistenti che la cooperativa attiva per le famiglie</li>
+    </ul>
+    <hr class="rule" style="border-color:rgba(245,240,232,0.25);">
+    <p style="font-size:0.85rem; color:rgba(245,240,232,0.55); font-style:italic;">
+      Mercato: famiglie della diaspora del Vallo (decine di migliaia) · Comuni · ASL Salerno · INPS
+    </p>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     PERCHÉ È DISRUTTIVA
+════════════════════════════════════════════════════════ -->
+<div>
+  <section class="section">
+    <p class="label">Differenziale Competitivo</p>
+    <h2 class="display-sm" style="margin-top:0.5rem; margin-bottom:0.5rem;">
+      Perché questa idea<br>non è come le altre.
+    </h2>
+    <p style="color:var(--pietra); font-size:0.95rem; max-width:600px;">
+      Ci sono già cooperative di comunità in Italia. Molte falliscono. Ecco perché questa è strutturalmente diversa.
+    </p>
+
+    <div class="disruption-grid">
+      <div class="disruption-card">
+        <span class="disruption-letter">I</span>
+        <h3 class="disruption-title">Inverte il flusso dei fondi pubblici</h3>
+        <p class="disruption-body">I fondi per le aree interne normalmente escono dal territorio — vanno a consulenti esterni, studi tecnici di Napoli o Roma. Questa cooperativa li trattiene dentro. Ogni euro di bando diventa lavoro locale, reddito locale, competenza locale che resta.</p>
+      </div>
+      <div class="disruption-card">
+        <span class="disruption-letter">II</span>
+        <h3 class="disruption-title">Risolve la capacità attuativa</h3>
+        <p class="disruption-body">Il Vallo non riesce a spendere i fondi che riceve perché non ha soggetti locali strutturati. La cooperativa diventa quel soggetto — con la competenza tecnica dell'Ing. Iovine per la parte progettuale e la rete PC Sassano per quella operativa. Il territorio si auto-organizza.</p>
+      </div>
+      <div class="disruption-card">
+        <span class="disruption-letter">III</span>
+        <h3 class="disruption-title">Silver Economy senza nostalgia</h3>
+        <p class="disruption-body">Non vende il passato ai turisti. Vende competenze reali al mercato reale. Gli anziani non sono decorazione — sono lavoratori qualificati in settori dove non hanno concorrenza. Questo cambia la dignità del modello e la sua sostenibilità nel tempo.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     I NUMERI — SU SFONDO SCURO
+════════════════════════════════════════════════════════ -->
+<div class="section-dark">
+  <section class="section-wide">
+    <p class="label" style="color:var(--ocra);">Proiezioni Economiche</p>
+    <h2 class="display-sm" style="margin-top:0.5rem; color:var(--pergamena);">I numeri, senza ottimismo.</h2>
+
+    <div class="stat-row">
+      <div class="stat-item">
+        <span class="stat-num">€ 28k</span>
+        <span class="stat-desc">Ricavi Anno 1<br>Avvio · 25% capacità</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">€ 110k</span>
+        <span class="stat-desc">Ricavi Anno 2<br>Regime · 3 servizi attivi</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">€ 200k</span>
+        <span class="stat-desc">Ricavi Anno 3<br>Consolidamento</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">Mese 18</span>
+        <span class="stat-desc">Break-even<br>Stima conservativa</span>
+      </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:4rem; margin-top:2rem;">
+      <div>
+        <p class="label" style="color:var(--ocra); margin-bottom:1.5rem;">Piano di Investimento Fase Pilota</p>
+        <table class="budget-table">
+          <thead>
+            <tr>
+              <th>Voce</th>
+              <th class="num">Min</th>
+              <th class="num">Max</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Costituzione cooperativa + notaio</td>
+              <td class="num">€ 1.500</td>
+              <td class="num">€ 2.500</td>
+            </tr>
+            <tr>
+              <td>Piattaforma gestionale e digitale</td>
+              <td class="num">€ 3.000</td>
+              <td class="num">€ 5.000</td>
+            </tr>
+            <tr>
+              <td>Formazione e certificazione soci</td>
+              <td class="num">€ 8.000</td>
+              <td class="num">€ 12.000</td>
+            </tr>
+            <tr>
+              <td>Capitale circolante primi 6 mesi</td>
+              <td class="num">€ 15.000</td>
+              <td class="num">€ 20.000</td>
+            </tr>
+            <tr>
+              <td>DL e progettazione (in kind · Ing. Iovine)</td>
+              <td class="num">€ 15.000</td>
+              <td class="num">€ 25.000</td>
+            </tr>
+            <tr>
+              <td><strong>Totale cassa necessaria</strong></td>
+              <td class="num"><strong>€ 28k</strong></td>
+              <td class="num"><strong>€ 40k</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <p class="label" style="color:var(--ocra); margin-bottom:1.5rem;">Fonti di Finanziamento</p>
+        <ul class="elegant-list">
+          <li style="color:rgba(245,240,232,0.8); border-bottom-color:rgba(181,132,42,0.2);">
+            <strong style="display:block; color:var(--ocra);">GAL Vallo di Diano — CSR Campania 2023/2027 SRG06</strong>
+            Fino al 70% · Azione turismo rurale e inclusione sociale · Bando attivo
+          </li>
+          <li style="color:rgba(245,240,232,0.8); border-bottom-color:rgba(181,132,42,0.2);">
+            <strong style="display:block; color:var(--ocra);">Fondazione Con il Sud</strong>
+            Contributo massimo €600.000 · Cofinanziamento 20% · Edizione 2026
+          </li>
+          <li style="color:rgba(245,240,232,0.8); border-bottom-color:rgba(181,132,42,0.2);">
+            <strong style="display:block; color:var(--ocra);">PNRR M1C3 — Borghi (Fase 2)</strong>
+            Comune capofila + Cooperativa come partner privato · Anno 2–3
+          </li>
+          <li style="color:rgba(245,240,232,0.8); border-bottom-color:rgba(181,132,42,0.2);">
+            <strong style="display:block; color:var(--ocra);">In kind Ing. Iovine + PC Sassano</strong>
+            €23.000–40.000 di valore come co-finanziamento certificabile
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     ROADMAP
+════════════════════════════════════════════════════════ -->
+<div>
+  <section class="section">
+    <p class="label">Roadmap Operativa</p>
+    <h2 class="display-sm" style="margin-top:0.5rem; margin-bottom:0.5rem;">
+      Cosa succede,<br>in quale ordine.
+    </h2>
+    <p style="color:var(--pietra); font-size:0.95rem; max-width:600px; margin-bottom:0;">
+      Non serve un immobile. Non serve un cantiere. Si parte con quello che esiste già.
+    </p>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <span class="timeline-period">Mesi<br>1 – 2</span>
+        <div class="timeline-content">
+          <h3>Fondamenta</h3>
+          <p>Costituzione della Cooperativa di Comunità (notaio, €1.500). Accordo formale con la Protezione Civile di Sassano come primo partner istituzionale. Mappatura competenze degli anziani già nella rete esistente. Contatto GAL Vallo di Diano per pre-istruttoria PSR Leader.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <span class="timeline-period">Mesi<br>3 – 6</span>
+        <div class="timeline-content">
+          <h3>Primi contratti e candidature</h3>
+          <p>Avvio servizi di presidio territoriale con 3 Comuni partner. Presentazione domanda PSR Leader GAL. Primo gruppo anziani-soci remunerati (6–8 persone). Avvio pratiche convenzione ASL Salerno per welfare di prossimità.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <span class="timeline-period">Mesi<br>7 – 18</span>
+        <div class="timeline-content">
+          <h3>Regime operativo</h3>
+          <p>Esito bandi. Avvio servizio manutenzione paesaggio con prime squadre miste. Convenzione ASL attiva. Espansione a 6–8 Comuni del comprensorio. Ingresso giovani soci-gestori. Break-even operativo.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <span class="timeline-period">Anno<br>3+</span>
+        <div class="timeline-content">
+          <h3>Scalabilità e modello</h3>
+          <p>Candidatura PNRR M1C3 con Comune capofila per espansione. Presentazione del modello ad ANCI Campania. Prima cooperativa di comunità del Vallo che diventa benchmark per le aree interne del Mezzogiorno.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     IL DEAL
+════════════════════════════════════════════════════════ -->
+<div class="section-stone">
+  <section class="section">
+    <p class="label">La Proposta alla Commissione</p>
+    <h2 class="display-sm" style="margin-top:0.5rem; margin-bottom:0.5rem;">
+      Tre firme.<br>Nessun euro di bilancio.
+    </h2>
+    <p style="color:var(--pietra); font-size:0.95rem; max-width:600px;">
+      Non chiediamo un investimento. Chiediamo di sbloccare quello che esiste già.
+    </p>
+
+    <div class="deal-grid">
+      <div class="deal-side">
+        <h3>NOS CHIEDIAMO</h3>
+        <div class="deal-item">
+          <span class="deal-num">1.</span>
+          <div class="deal-text">
+            <strong>Lettera di supporto istituzionale</strong>
+            <p>Certifica la partnership con il Comune per la candidatura al GAL Leader CSR 2023/2027 e alla Fondazione Con il Sud. Questa lettera sblocca fino a €70.000 di contributo a fondo perduto.</p>
+          </div>
+        </div>
+        <div class="deal-item">
+          <span class="deal-num">2.</span>
+          <div class="deal-text">
+            <strong>Mandato per la convenzione ASL</strong>
+            <p>Inserimento del Comune come partner istituzionale nella convenzione con ASL Salerno per i servizi di assistenza domiciliare leggera. Apre il mercato più stabile dei tre.</p>
+          </div>
+        </div>
+        <div class="deal-item">
+          <span class="deal-num">3.</span>
+          <div class="deal-text">
+            <strong>Stima degli anziani in carico ai servizi sociali</strong>
+            <p>Non i dati sensibili — solo la stima numerica e geografica per dimensionare il servizio welfare nel primo anno. Una informazione che l'amministrazione già ha.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="deal-side">
+        <h3>IL COMUNE RICEVE</h3>
+        <div class="deal-item">
+          <span class="deal-num" style="color:var(--salvia);">→</span>
+          <div class="deal-text">
+            <strong>Fondi europei trattenuti nel territorio</strong>
+            <p>Ogni euro di bando diventa lavoro locale. Il Comune smette di perdere risorse che vanno a consulenti esterni.</p>
+          </div>
+        </div>
+        <div class="deal-item">
+          <span class="deal-num" style="color:var(--salvia);">→</span>
+          <div class="deal-text">
+            <strong>Occupazione locale misurabile</strong>
+            <p>Da 8 anziani-soci remunerati nel primo anno a 35+ a regime. Più giovani soci-gestori. Tutti residenti.</p>
+          </div>
+        </div>
+        <div class="deal-item">
+          <span class="deal-num" style="color:var(--salvia);">→</span>
+          <div class="deal-text">
+            <strong>Welfare alleggerito</strong>
+            <p>La cooperativa assorbe parte della domanda di assistenza domiciliare che oggi pesa sui servizi sociali comunali.</p>
+          </div>
+        </div>
+        <div class="deal-item">
+          <span class="deal-num" style="color:var(--salvia);">→</span>
+          <div class="deal-text">
+            <strong>Un modello replicabile e citabile</strong>
+            <p>Il Comune partner sarà il primo di un modello che verrà presentato a livello regionale e nazionale come esempio concreto di area interna che si auto-organizza.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     CTA FINALE
+════════════════════════════════════════════════════════ -->
+<div class="cta-section">
+  <p class="label" style="margin-bottom:2rem;">La Domanda</p>
+  <h2 class="cta-title">
+    "Tra dieci anni,<br>che avrete scelto?"
+  </h2>
+  <p class="cta-body">
+    Il Vallo di Diano non ha bisogno di assistenza. Ha bisogno di un soggetto locale che sappia usare quello che ha già — le persone, le competenze, i fondi, il territorio. Questo soggetto siamo noi.
+  </p>
+  <span class="ornament" style="color:var(--ocra); opacity:0.5;">· · ·</span>
+  <p class="cta-promotore">
+    ING. EMANUELE IOVINE · INGEGNERE CIVILE<br>
+    <span style="opacity:0.5; font-size:0.55rem; letter-spacing:0.15em;">
+      PROTEZIONE CIVILE DI SASSANO · GRUPPO LUCANO · VALLO DI DIANO · 2026
+    </span>
+  </p>
+</div>
+
+</body>
+</html>
