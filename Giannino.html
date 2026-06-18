@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gianfranco Iovine — Ricercatore · Territorial Innovation Designer</title>
+<meta name="description" content="Gianfranco Iovine, ricercatore e progettista di innovazione territoriale. Modelli decisionali multicriterio, aree interne, Vallo di Diano, Diano Open Lab.">
+<meta name="theme-color" content="#eef1ee">
+<meta property="og:title" content="Gianfranco Iovine — Territorial Innovation Designer">
+<meta property="og:description" content="Studio come si prendono decisioni migliori. Progetto strumenti per farlo. Costruisco iniziative che trasformano le aree interne in luoghi capaci di generare innovazione.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%231b1f1d'/%3E%3Ctext x='50' y='67' font-family='Georgia,serif' font-size='50' fill='%23eef1ee' text-anchor='middle'%3EGI%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+/* ============================================================
+   TOKENS
+============================================================ */
+:root{
+  --ink:#1b1f1d;
+  --paper:#eef1ee;
+  --panel:#e5e9e4;
+  --slate:#3c5a63;
+  --slate-soft:rgba(60,90,99,0.08);
+  --ochre:#a8651f;
+  --forest:#2d4a35;
+  --line:rgba(27,31,29,0.14);
+  --muted:rgba(27,31,29,0.6);
+  --muted-2:rgba(27,31,29,0.42);
+  --max:920px;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'IBM Plex Sans',sans-serif;
+  font-weight:300;
+  background:var(--paper);
+  color:var(--ink);
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+  overflow-wrap:break-word;
+}
+a{color:inherit;}
+a:focus-visible,button:focus-visible{outline:2px solid var(--slate);outline-offset:3px;}
+
+.wrap{width:90%;max-width:var(--max);margin:0 auto;}
+
+.eyebrow{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.7rem;letter-spacing:0.22em;text-transform:uppercase;
+  color:var(--slate);margin-bottom:1.1rem;display:flex;align-items:center;gap:0.6em;
+}
+.eyebrow::before{content:'';display:inline-block;width:14px;height:1px;background:currentColor;flex-shrink:0;}
+h1,h2,h3{font-family:'Fraunces',serif;font-weight:500;color:var(--ink);}
+h2{font-size:clamp(2.05rem,4.1vw,2.95rem);line-height:1.13;margin-bottom:1.6rem;text-wrap:balance;}
+h2 em{font-style:italic;font-weight:500;color:var(--slate);}
+p em,.hero-lead em{font-family:'Fraunces',serif;font-style:italic;font-weight:500;color:var(--slate);}
+p{color:var(--muted);}
+p+p{margin-top:1.1rem;}
+
+@media (prefers-reduced-motion: reduce){
+  *{transition-duration:0.001ms!important;animation-duration:0.001ms!important;}
+}
+
+/* ============================================================
+   REVEAL
+============================================================ */
+.reveal{opacity:0;transform:translateY(16px);transition:opacity 0.7s ease,transform 0.7s ease;}
+.reveal.on{opacity:1;transform:translateY(0);}
+
+/* ============================================================
+   NAV
+============================================================ */
+nav{
+  position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.2rem 5vw;
+  background:var(--paper);
+  border-bottom:1px solid transparent;
+  transition:border-color 0.3s;
+}
+nav.scrolled{border-color:var(--line);}
+.brand{
+  font-family:'Fraunces',serif;font-weight:500;font-size:1.05rem;
+  text-decoration:none;letter-spacing:0.01em;
+}
+.navlinks{display:flex;gap:1.9rem;list-style:none;}
+.navlinks a{
+  font-family:'IBM Plex Mono',monospace;font-size:0.66rem;
+  letter-spacing:0.14em;text-transform:uppercase;
+  text-decoration:none;color:var(--muted);transition:color 0.2s;
+}
+.navlinks a:hover{color:var(--slate);}
+@media (max-width:760px){
+  .navlinks li:not(:last-child){display:none;}
+  .navlinks a{padding:0.4rem 0;display:inline-block;}
+}
+@media (max-width:480px){
+  .brand{font-size:0.94rem;}
+  nav{padding:1.05rem 6vw;}
+  .eyebrow{letter-spacing:0.13em;font-size:0.65rem;}
+}
+
+/* ============================================================
+   HERO
+============================================================ */
+header.hero{
+  position:relative;
+  padding:clamp(3.2rem,9vw,7rem) 5vw clamp(2.8rem,7vw,6rem);
+  overflow:hidden;
+}
+.contour{
+  position:absolute;left:0;right:0;bottom:0;
+  width:100%;height:auto;
+  opacity:0.55;
+  pointer-events:none;
+  animation:contourDrift 24s ease-in-out infinite alternate;
+}
+@keyframes contourDrift{from{transform:translateX(0);}to{transform:translateX(-16px);}}
+.hero-inner{position:relative;z-index:2;max-width:760px;}
+.hero-inner h1{
+  font-size:clamp(2.5rem,8.6vw,5.6rem);
+  line-height:0.96;
+  margin-bottom:1.4rem;
+  letter-spacing:-0.01em;
+}
+.hn-line{display:block;overflow:hidden;}
+.hn-line span{display:inline-block;transform:translateY(112%);animation:hnRise 0.9s cubic-bezier(.2,.8,.2,1) forwards;}
+.hn-line:nth-child(1) span{animation-delay:0.12s;}
+.hn-line:nth-child(2) span{animation-delay:0.3s;}
+@keyframes hnRise{to{transform:translateY(0);}}
+.hero-lead{
+  font-size:1.08rem;line-height:1.75;
+  color:var(--ink);opacity:0.78;
+  max-width:560px;margin-bottom:1.8rem;
+}
+.hero-meta{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.72rem;letter-spacing:0.06em;
+  color:var(--muted-2);margin-bottom:2.2rem;
+}
+.hero-cta{display:flex;gap:2rem;flex-wrap:wrap;}
+.hero-cta a{
+  font-family:'IBM Plex Mono',monospace;font-size:0.74rem;
+  letter-spacing:0.1em;text-transform:uppercase;
+  text-decoration:none;color:var(--ink);
+  border-bottom:1px solid var(--ink);padding-bottom:3px;
+  transition:color 0.2s,border-color 0.2s;
+}
+.hero-cta a:hover{color:var(--slate);border-color:var(--slate);}
+@media (max-width:480px){
+  .hero-cta{gap:1.3rem;}
+  .hero-lead{font-size:1rem;}
+}
+
+/* ============================================================
+   SECTION SHELL
+============================================================ */
+.section{
+  padding:clamp(2.6rem,7vw,7rem) 5vw;
+  border-top:1px solid var(--line);
+}
+.section.alt{background:var(--panel);}
+.section-head{max-width:640px;margin-bottom:3rem;}
+
+.interlude{
+  background:var(--ink);color:var(--paper);
+  padding:clamp(3.2rem,9vw,8rem) 6vw;text-align:center;
+  position:relative;overflow:hidden;
+  border-top:1px solid var(--line);
+}
+.interlude::before{
+  content:'AHP';position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  font-family:'Fraunces',serif;font-weight:600;
+  font-size:clamp(8rem,22vw,16rem);
+  color:rgba(238,241,238,0.045);
+  letter-spacing:-0.02em;white-space:nowrap;pointer-events:none;
+}
+.interlude-inner{max-width:760px;margin:0 auto;position:relative;z-index:2;}
+.interlude-quote{
+  font-family:'Fraunces',serif;font-style:italic;font-weight:500;
+  font-size:clamp(1.6rem,3.8vw,2.7rem);line-height:1.35;color:var(--paper);
+}
+.interlude-tag{
+  display:block;margin-top:1.6rem;
+  font-family:'IBM Plex Mono',monospace;font-size:0.68rem;
+  letter-spacing:0.14em;text-transform:uppercase;color:var(--ochre);
+}
+
+/* ============================================================
+   CHI SONO
+============================================================ */
+.bio{max-width:var(--max);margin:0 auto;}
+.bio-text{max-width:640px;font-size:1.02rem;}
+
+/* ============================================================
+   COSA STO COSTRUENDO — projects
+============================================================ */
+.projects-list{max-width:var(--max);margin:0 auto;}
+.project-card{
+  border-top:1px solid var(--line);
+  padding:2.6rem 0;
+}
+.project-card:first-child{border-top:none;}
+.project-header{
+  display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:start;
+  margin-bottom:1.1rem;
+}
+.project-title{
+  font-family:'Fraunces',serif;font-weight:500;
+  font-size:1.55rem;color:var(--ink);line-height:1.2;
+}
+.project-badge{
+  font-family:'IBM Plex Mono',monospace;font-size:0.62rem;
+  letter-spacing:0.14em;text-transform:uppercase;
+  padding:0.3rem 0.75rem;border:1px solid var(--line);
+  color:var(--muted-2);white-space:nowrap;align-self:flex-start;
+}
+.project-badge.active{border-color:var(--slate);color:var(--slate);}
+.project-badge.flagship{border-color:var(--ochre);color:var(--ochre);}
+.project-badge.evaluation{border-color:var(--muted-2);color:var(--muted-2);}
+.project-desc{font-size:0.96rem;color:var(--muted);max-width:640px;}
+.project-meta{
+  margin-top:1.2rem;
+  display:flex;flex-wrap:wrap;gap:0.5rem;
+}
+.project-tag{
+  font-family:'IBM Plex Mono',monospace;font-size:0.61rem;
+  letter-spacing:0.1em;text-transform:uppercase;
+  padding:0.22rem 0.6rem;background:var(--slate-soft);color:var(--slate);
+}
+.project-link{
+  display:inline-flex;align-items:center;gap:0.5rem;margin-top:1.4rem;
+  font-family:'IBM Plex Mono',monospace;font-size:0.7rem;
+  letter-spacing:0.08em;text-transform:uppercase;
+  text-decoration:none;color:var(--slate);
+  border-bottom:1px solid var(--slate);padding-bottom:2px;
+}
+.project-link:hover{color:var(--ochre);border-color:var(--ochre);}
+
+/* DIANO OPEN LAB — flagship card */
+.dol-card{
+  border-top:1px solid var(--line);
+  margin-top:3rem;
+  padding-top:2.6rem;
+}
+.dol-inner{
+  background:var(--ink);color:var(--paper);
+  padding:clamp(2.4rem,5vw,4.2rem);
+  position:relative;overflow:hidden;
+}
+.dol-inner::before{
+  content:'DOL';position:absolute;right:-0.1em;bottom:-0.25em;
+  font-family:'Fraunces',serif;font-weight:600;
+  font-size:clamp(5rem,14vw,10rem);
+  color:rgba(238,241,238,0.04);
+  letter-spacing:-0.02em;pointer-events:none;line-height:1;
+}
+.dol-eyebrow{
+  font-family:'IBM Plex Mono',monospace;font-size:0.65rem;
+  letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--ochre);margin-bottom:1rem;display:flex;align-items:center;gap:0.6em;
+}
+.dol-eyebrow::before{content:'';display:inline-block;width:14px;height:1px;background:currentColor;}
+.dol-title{
+  font-family:'Fraunces',serif;font-weight:500;
+  font-size:clamp(1.7rem,4vw,2.8rem);color:var(--paper);line-height:1.1;
+  margin-bottom:1.3rem;text-wrap:balance;
+}
+.dol-subtitle{
+  font-size:0.98rem;color:rgba(238,241,238,0.7);max-width:560px;
+  margin-bottom:2rem;line-height:1.7;
+}
+.dol-pillars{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1.2rem;
+  margin-bottom:2rem;
+}
+.dol-pillar{
+  border:1px solid rgba(238,241,238,0.14);padding:1.2rem;
+}
+.dol-pillar-title{
+  font-family:'IBM Plex Mono',monospace;font-size:0.66rem;
+  letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--ochre);margin-bottom:0.55rem;
+}
+.dol-pillar-text{font-size:0.85rem;color:rgba(238,241,238,0.65);line-height:1.55;}
+.dol-vision{
+  border-top:1px solid rgba(238,241,238,0.14);padding-top:1.6rem;
+  font-family:'Fraunces',serif;font-style:italic;font-weight:500;
+  font-size:clamp(1.1rem,2.4vw,1.45rem);color:rgba(238,241,238,0.88);
+  line-height:1.45;max-width:620px;
+}
+@media (max-width:640px){
+  .project-header{grid-template-columns:1fr;}
+  .project-badge{align-self:auto;}
+}
+
+/* ============================================================
+   INCARICHI
+============================================================ */
+.roles-list{max-width:var(--max);margin:0 auto;}
+.role-item{
+  display:grid;grid-template-columns:200px 1fr;gap:3rem;
+  padding:2rem 0;border-top:1px solid var(--line);
+}
+.role-item:first-child{border-top:none;}
+.role-period{
+  font-family:'IBM Plex Mono',monospace;font-size:0.72rem;
+  letter-spacing:0.06em;color:var(--slate);padding-top:0.15rem;
+}
+.role-body .role-title{
+  font-weight:500;color:var(--ink);font-size:0.98rem;margin-bottom:0.25rem;
+}
+.role-body .role-org{
+  font-family:'IBM Plex Mono',monospace;font-size:0.68rem;
+  letter-spacing:0.06em;color:var(--muted-2);
+}
+@media (max-width:640px){
+  .role-item{grid-template-columns:1fr;gap:0.5rem;}
+}
+
+/* ============================================================
+   RISULTATI
+============================================================ */
+.results-grid{
+  max-width:var(--max);margin:0 auto;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.2rem;
+}
+.result-item{
+  border:1px solid var(--line);padding:1.6rem;
+  display:flex;align-items:flex-start;gap:1rem;
+}
+.result-check{
+  font-family:'IBM Plex Mono',monospace;font-size:0.7rem;
+  color:var(--slate);flex-shrink:0;margin-top:0.15rem;
+}
+.result-text{font-size:0.92rem;color:var(--muted);line-height:1.55;}
+.result-text strong{color:var(--ink);font-weight:500;}
+
+/* ============================================================
+   COSA FACCIO — label / description rows
+============================================================ */
+.work-list{max-width:var(--max);margin:0 auto;}
+.work-row{
+  display:grid;grid-template-columns:280px 1fr;gap:3rem;
+  padding:2.2rem 0;border-top:1px solid var(--line);
+}
+.work-row:first-child{border-top:none;}
+.work-label{
+  font-family:'Fraunces',serif;font-weight:500;
+  font-size:1.3rem;color:var(--ink);line-height:1.3;
+  transition:color 0.25s;
+}
+.work-row:hover .work-label{color:var(--slate);}
+.work-desc{font-size:0.96rem;color:var(--muted);}
+@media (max-width:760px){
+  .work-row{grid-template-columns:1fr;gap:0.7rem;}
+}
+
+/* ============================================================
+   PERCORSO — two columns, simple list
+============================================================ */
+.path-grid{
+  max-width:var(--max);margin:0 auto;
+  display:grid;grid-template-columns:1fr 1fr;gap:5vw;
+}
+.path-col h3{
+  font-size:0.72rem;font-family:'IBM Plex Mono',monospace;
+  letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--slate);font-weight:500;margin-bottom:1.6rem;
+}
+.path-item{
+  padding:1.1rem 0;border-top:1px solid var(--line);
+}
+.path-item:first-of-type{border-top:none;}
+.path-item .p-title{font-weight:500;color:var(--ink);font-size:0.96rem;}
+.path-item .p-meta{
+  font-family:'IBM Plex Mono',monospace;font-size:0.7rem;
+  color:var(--muted-2);margin-top:0.35rem;letter-spacing:0.02em;
+}
+@media (max-width:760px){
+  .path-grid{grid-template-columns:1fr;gap:3rem;}
+}
+
+/* ============================================================
+   RICERCA — publication list
+============================================================ */
+.pub-list{max-width:var(--max);margin:0 auto;}
+.pub-item{
+  display:grid;grid-template-columns:80px 1fr;gap:2rem;
+  padding:1.5rem 0;border-top:1px solid var(--line);
+}
+.pub-item:first-child{border-top:none;}
+.pub-year{
+  font-family:'IBM Plex Mono',monospace;font-size:0.82rem;
+  color:var(--slate);padding-top:0.1rem;
+}
+.pub-venue{
+  font-family:'IBM Plex Mono',monospace;font-size:0.66rem;
+  letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--muted-2);margin-bottom:0.4rem;display:block;
+}
+.pub-title{font-size:0.98rem;color:var(--ink);font-weight:400;}
+.pub-link{
+  display:inline-flex;align-items:center;gap:0.4rem;
+  margin-top:0.5rem;
+  font-family:'IBM Plex Mono',monospace;font-size:0.64rem;
+  letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--slate);text-decoration:none;
+  border-bottom:1px solid rgba(60,90,99,0.35);padding-bottom:1px;
+}
+.pub-link:hover{color:var(--ochre);border-color:var(--ochre);}
+.pub-academic-links{
+  display:flex;gap:1.4rem;flex-wrap:wrap;margin-top:2.2rem;
+  padding-top:2rem;border-top:1px solid var(--line);
+}
+/* ============================================================
+   TIMELINE
+============================================================ */
+.timeline{max-width:var(--max);margin:0 auto;position:relative;}
+.timeline::before{
+  content:'';position:absolute;left:140px;top:0;bottom:0;width:1px;
+  background:var(--line);
+}
+.tl-item{
+  display:grid;grid-template-columns:140px 1fr;gap:0;
+  padding:0 0 2.8rem;position:relative;
+}
+.tl-item:last-child{padding-bottom:0;}
+.tl-year{
+  font-family:'IBM Plex Mono',monospace;font-size:0.78rem;
+  letter-spacing:0.04em;color:var(--slate);
+  padding-top:0.25rem;padding-right:2rem;text-align:right;
+}
+.tl-dot{
+  position:absolute;left:132px;top:0.55rem;
+  width:17px;height:17px;border-radius:50%;
+  background:var(--paper);border:2px solid var(--line);
+  transition:border-color 0.2s;
+}
+.tl-item:hover .tl-dot{border-color:var(--slate);}
+.tl-item.milestone .tl-dot{background:var(--slate);border-color:var(--slate);}
+.tl-item.flagship .tl-dot{background:var(--ochre);border-color:var(--ochre);}
+.tl-body{padding-left:2.2rem;}
+.tl-title{font-weight:500;color:var(--ink);font-size:0.98rem;line-height:1.4;}
+.tl-sub{
+  font-family:'IBM Plex Mono',monospace;font-size:0.68rem;
+  color:var(--muted-2);margin-top:0.25rem;letter-spacing:0.03em;
+}
+.tl-note{font-size:0.88rem;color:var(--muted);margin-top:0.4rem;line-height:1.55;}
+@media (max-width:600px){
+  .timeline::before{left:0;}
+  .tl-item{grid-template-columns:1fr;padding-left:1.6rem;}
+  .tl-year{text-align:left;padding-right:0;padding-bottom:0.2rem;}
+  .tl-dot{left:-8px;}
+  .tl-body{padding-left:0;}
+}
+
+.pub-academic-links a{
+  font-family:'IBM Plex Mono',monospace;font-size:0.7rem;
+  letter-spacing:0.1em;text-transform:uppercase;
+  text-decoration:none;color:var(--slate);
+  border-bottom:1px solid var(--slate);padding-bottom:2px;
+  transition:color 0.2s,border-color 0.2s;
+}
+.pub-academic-links a:hover{color:var(--ochre);border-color:var(--ochre);}
+@media (max-width:760px){
+  .pub-item{grid-template-columns:1fr;gap:0.3rem;}
+}
+
+/* ============================================================
+   SCL
+============================================================ */
+.scl-block{
+  max-width:var(--max);margin:0 auto;
+  display:grid;grid-template-columns:1fr 280px;gap:4rem;align-items:start;
+}
+.scl-text{max-width:560px;}
+.scl-card{
+  border:1px solid var(--line);padding:1.8rem;
+  background:var(--paper);
+}
+.scl-card .sc-label{
+  font-family:'IBM Plex Mono',monospace;font-size:0.62rem;
+  letter-spacing:0.14em;text-transform:uppercase;color:var(--ochre);
+  display:block;margin-bottom:0.9rem;
+}
+.scl-fact{padding:0.6rem 0;border-top:1px solid var(--line);font-size:0.86rem;color:var(--muted);}
+.scl-fact:first-of-type{border-top:none;}
+.scl-fact strong{color:var(--ink);font-weight:500;}
+.scl-link{
+  display:inline-flex;align-items:center;gap:0.5rem;margin-top:1.4rem;
+  font-family:'IBM Plex Mono',monospace;font-size:0.7rem;
+  letter-spacing:0.08em;text-transform:uppercase;
+  text-decoration:none;color:var(--slate);
+  border-bottom:1px solid var(--slate);padding-bottom:2px;
+}
+.scl-link:hover{color:var(--ochre);border-color:var(--ochre);}
+@media (max-width:760px){
+  .scl-block{grid-template-columns:1fr;gap:2.2rem;}
+}
+
+/* ============================================================
+   FOOTER / CONTATTI
+============================================================ */
+footer{
+  padding:clamp(3rem,7vw,7rem) 5vw clamp(2.2rem,4vw,4rem);
+  border-top:1px solid var(--line);
+  background:var(--ink);color:var(--paper);
+}
+footer h2{color:var(--paper);}
+.contact-grid{
+  max-width:var(--max);margin:0 auto;
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:2.5rem;
+  margin-top:2.5rem;
+}
+.contact-item .c-label{
+  font-family:'IBM Plex Mono',monospace;font-size:0.62rem;
+  letter-spacing:0.16em;text-transform:uppercase;
+  color:rgba(238,241,238,0.4);display:block;margin-bottom:0.6rem;
+}
+.contact-item a, .contact-item span{
+  font-size:0.98rem;text-decoration:none;color:var(--paper);
+}
+.contact-item a:hover{color:var(--ochre);}
+.foot-bottom{
+  max-width:var(--max);margin:4rem auto 0;
+  padding-top:1.6rem;border-top:1px solid rgba(238,241,238,0.14);
+  font-family:'IBM Plex Mono',monospace;font-size:0.64rem;
+  letter-spacing:0.06em;color:rgba(238,241,238,0.35);
+}
+@media (max-width:560px){
+  .contact-grid{flex-direction:column;gap:1.8rem;margin-top:2rem;}
+  .foot-bottom{margin-top:2.6rem;}
+}
+</style>
+</head>
+<body>
+
+<nav id="navbar">
+  <a href="#" class="brand">Gianfranco Iovine</a>
+  <ul class="navlinks">
+    <li><a href="#chi-sono">Chi sono</a></li>
+    <li><a href="#progetti">Progetti</a></li>
+    <li><a href="#incarichi">Incarichi</a></li>
+    <li><a href="#percorso">Percorso</a></li>
+    <li><a href="#ricerca">Ricerca</a></li>
+    <li><a href="#contatti">Contatti</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <svg class="contour" viewBox="0 0 1200 260" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,190 C150,150 280,210 420,170 C560,130 660,200 800,160 C940,120 1040,190 1200,150" fill="none" stroke="#3c5a63" stroke-width="1.2" opacity="0.5"/>
+    <path d="M0,215 C160,180 300,235 440,200 C580,165 680,225 820,190 C960,155 1060,215 1200,180" fill="none" stroke="#3c5a63" stroke-width="1.2" opacity="0.35"/>
+    <path d="M0,240 C170,210 310,255 450,225 C590,195 690,245 830,215 C970,185 1070,240 1200,210" fill="none" stroke="#a8651f" stroke-width="1.2" opacity="0.3"/>
+  </svg>
+  <div class="hero-inner">
+    <span class="eyebrow">Decision Analyst · Ricercatore · Territorial Innovation Designer</span>
+    <h1><span class="hn-line"><span>Gianfranco</span></span><span class="hn-line"><span>Iovine</span></span></h1>
+    <p class="hero-lead">Studio come si prendono decisioni migliori. Progetto strumenti per farlo. E costruisco iniziative che aiutano le aree interne a trasformare conoscenza, risorse e comunità in <em>opportunità reali di sviluppo.</em></p>
+    <p class="hero-meta">Dal Vallo di Diano · Dottore di ricerca, Università della Tuscia · Febbraio 2026</p>
+    <div class="hero-cta">
+      <a href="#progetti">Scopri i progetti ↓</a>
+      <a href="mailto:info.gfr@icloud.com">Contattami →</a>
+    </div>
+  </div>
+</header>
+
+<!-- CHI SONO -->
+<section class="section" id="chi-sono">
+  <div class="bio">
+    <div class="section-head reveal">
+      <span class="eyebrow">Chi sono</span>
+      <h2>Una visione <em>per le aree interne.</em></h2>
+    </div>
+    <div class="bio-text reveal">
+      <p>Le decisioni pubbliche e private raramente falliscono per mancanza di dati. Più spesso falliscono perché <em>criteri e priorità non vengono mai resi espliciti.</em> Da qui parto: aiuto chi deve scegliere — un comune, un'impresa, una comunità — a confrontare le proprie priorità in modo sistematico, attraverso l'Analytic Hierarchy Process (AHP) e modelli decisionali multicriterio.</p>
+      <p>Sono originario del Vallo di Diano. Credo che le aree interne possano diventare <em>laboratori di innovazione</em> e non soltanto territori da sostenere. Per questo lavoro all'incrocio tra ricerca, amministrazioni pubbliche, imprese e comunità locali — cercando strumenti che mettano in connessione questi mondi invece di lasciarli separati.</p>
+    </div>
+  </div>
+</section>
+
+<!-- COSA STO COSTRUENDO -->
+<section class="section alt" id="progetti">
+  <div class="projects-list">
+    <div class="section-head reveal">
+      <span class="eyebrow">Cosa sto costruendo</span>
+      <h2>Progetti e <em>iniziative attive.</em></h2>
+    </div>
+
+    <!-- Atena Compass -->
+    <div class="project-card reveal">
+      <div class="project-header">
+        <span class="project-title">Atena Compass</span>
+        <span class="project-badge active">Attivo · su richiesta</span>
+      </div>
+      <p class="project-desc">Piattaforma di supporto decisionale multicriterio sviluppata per l'Impresa di Comunità di Atena Lucana. Nata nella Winter School "Fare Impresa. Fare Comunità." e validata metodologicamente nell'ambito della ricerca dell'Università della Tuscia, applica il modello SEESIM per rendere trasparenti le priorità di cittadini e amministratori. Futura evoluzione open source.</p>
+      <div class="project-meta">
+        <span class="project-tag">AHP / SEESIM</span>
+        <span class="project-tag">Impresa di Comunità</span>
+        <span class="project-tag">Partecipazione</span>
+        <span class="project-tag">Open Source (futuro)</span>
+      </div>
+      <a class="project-link" href="./atenacompass/">Apri la piattaforma →</a>
+    </div>
+
+    <!-- DSI -->
+    <div class="project-card reveal">
+      <div class="project-header">
+        <span class="project-title">DSI — Diano Social Incubator</span>
+        <span class="project-badge evaluation">Proposta in valutazione</span>
+      </div>
+      <p class="project-desc">Proposta progettuale presentata al concorso della Protezione Civile (Gruppo Lucano-Sassano) per trasformare il sapere artigiano degli anziani del territorio in nuove micro-imprese per giovani e donne. Non un progetto avviato — una proposta in fase di valutazione, con un impianto metodologico preciso.</p>
+      <div class="project-meta">
+        <span class="project-tag">Economia sociale</span>
+        <span class="project-tag">Trasferimento competenze</span>
+        <span class="project-tag">Protezione Civile</span>
+      </div>
+      <a class="project-link" href="./dsi/">Leggi il manifesto →</a>
+    </div>
+
+    <!-- Vallo Vitale -->
+    <div class="project-card reveal">
+      <div class="project-header">
+        <span class="project-title">Vallo Vitale</span>
+        <span class="project-badge active">Laboratorio di idee</span>
+      </div>
+      <p class="project-desc">Laboratorio di progettazione territoriale per il Vallo di Diano: uno spazio di elaborazione di idee, scenari e proposte per lo sviluppo locale. Connette competenze diverse attorno a sfide concrete del territorio.</p>
+      <div class="project-meta">
+        <span class="project-tag">Progettazione territoriale</span>
+        <span class="project-tag">Vallo di Diano</span>
+      </div>
+      <a class="project-link" href="./vallovitale/">Esplora il progetto →</a>
+    </div>
+
+    <!-- DIANO OPEN LAB — flagship -->
+    <div class="dol-card reveal">
+      <div class="dol-inner">
+        <p class="dol-eyebrow">Progetto bandiera</p>
+        <h2 class="dol-title">Diano Open Lab</h2>
+        <p class="dol-subtitle">Startup innovativa dedicata all'Open Innovation nelle aree interne. Un'infrastruttura capace di connettere imprese, università, scuole ed enti pubblici attorno a progetti reali di sviluppo territoriale — a partire dalla filiera del castagno del Vallo di Diano.</p>
+        <div class="dol-pillars">
+          <div class="dol-pillar">
+            <div class="dol-pillar-title">Call di Innovazione</div>
+            <div class="dol-pillar-text">Sfide aperte rivolte a studenti, professionisti, startup e ricercatori su temi reali del territorio.</div>
+          </div>
+          <div class="dol-pillar">
+            <div class="dol-pillar-title">Academy Territoriale</div>
+            <div class="dol-pillar-text">Percorsi formativi costruiti a partire da casi concreti del Vallo di Diano.</div>
+          </div>
+          <div class="dol-pillar">
+            <div class="dol-pillar-title">Laboratori di Prototipazione</div>
+            <div class="dol-pillar-text">Sviluppo di prodotti e soluzioni in ambiente reale, a partire dalla segheria e lavorazione del castagno.</div>
+          </div>
+          <div class="dol-pillar">
+            <div class="dol-pillar-title">Ricerca Applicata</div>
+            <div class="dol-pillar-text">Collaborazioni con università e centri di ricerca su economia circolare, biomateriali, edilizia sostenibile.</div>
+          </div>
+        </div>
+        <p class="dol-vision">Non un progetto per le aree interne.<br>Un progetto costruito dalle aree interne.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- INTERLUDIO -->
+<section class="interlude reveal">
+  <div class="interlude-inner">
+    <p class="interlude-quote">"Una decisione pubblica non diventa giusta perché è informata. Diventa giusta quando i criteri usati per prenderla sono visibili a tutti."</p>
+    <span class="interlude-tag">Il principio dietro Atena Compass</span>
+  </div>
+</section>
+
+<!-- INCARICHI E RESPONSABILITÀ -->
+<section class="section" id="incarichi">
+  <div class="roles-list">
+    <div class="section-head reveal" style="max-width:var(--max);margin:0 auto 3rem;">
+      <span class="eyebrow">Incarichi e responsabilità</span>
+      <h2>Ruoli <em>istituzionali e professionali.</em></h2>
+    </div>
+
+    <div class="role-item reveal">
+      <div class="role-period">Da maggio 2026</div>
+      <div class="role-body">
+        <div class="role-title">Esperto — Commissione Locale per il Paesaggio</div>
+        <div class="role-org">Comune di Padula · Discipline agricolo-forestali e naturalistiche</div>
+      </div>
+    </div>
+
+    <div class="role-item reveal">
+      <div class="role-period">2022 – 2024</div>
+      <div class="role-body">
+        <div class="role-title">Esperto Facilitatore Digitale</div>
+        <div class="role-org">IFEL Campania · Camera di Commercio di Napoli</div>
+      </div>
+    </div>
+
+    <div class="role-item reveal">
+      <div class="role-period">2022 – 2024</div>
+      <div class="role-body">
+        <div class="role-title">Consulente esterno — Tecnologie abilitanti e Impresa 4.0</div>
+        <div class="role-org">Camera di Commercio di Napoli</div>
+      </div>
+    </div>
+
+    <div class="role-item reveal">
+      <div class="role-period">In corso</div>
+      <div class="role-body">
+        <div class="role-title">Socio e analista amministrativo-finanziario</div>
+        <div class="role-org">SCL S.r.l. — Padula Scalo (SA)</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- TIMELINE PERCORSO -->
+<section class="section alt" id="percorso">
+  <div class="section-head reveal" style="max-width:var(--max);margin:0 auto 3.5rem;">
+    <span class="eyebrow">Percorso</span>
+    <h2>Una traiettoria <em>in costruzione.</em></h2>
+  </div>
+  <div class="timeline">
+
+    <div class="tl-item reveal">
+      <div class="tl-year">2017</div>
+      <div class="tl-dot"></div>
+      <div class="tl-body">
+        <div class="tl-title">Diploma in Costruzioni, Ambiente e Territorio</div>
+        <div class="tl-sub">Istituto Tecnico · Sala Consilina (SA)</div>
+      </div>
+    </div>
+
+    <div class="tl-item reveal">
+      <div class="tl-year">2017 – 2020</div>
+      <div class="tl-dot"></div>
+      <div class="tl-body">
+        <div class="tl-title">Laurea in Economia Aziendale</div>
+        <div class="tl-sub">Università degli Studi di Salerno</div>
+      </div>
+    </div>
+
+    <div class="tl-item reveal">
+      <div class="tl-year">2020 – 2022</div>
+      <div class="tl-dot"></div>
+      <div class="tl-body">
+        <div class="tl-title">Laurea magistrale in Economia e Finanza</div>
+        <div class="tl-sub">Università degli Studi di Salerno</div>
+      </div>
+    </div>
+
+    <div class="tl-item milestone reveal">
+      <div class="tl-year">2022</div>
+      <div class="tl-dot"></div>
+      <div class="tl-body">
+        <div class="tl-title">Visiting Researcher — Erasmus+</div>
+        <div class="tl-sub">Universitat Politècnica de València</div>
+        <div class="tl-note">Primo contatto con i modelli multicriterio applicati alla sostenibilità pubblica.</div>
+      </div>
+    </div>
+
+    <div class="tl-item reveal">
+      <div class="tl-year">2022 – 2024</div>
+      <div class="tl-dot"></div>
+      <div class="tl-body">
+        <div class="tl-title">Facilitatore Digitale — IFEL Campania</div>
+        <div class="tl-sub">Camera di Commercio di Napoli · Tecnologie abilitanti e Impresa 4.0</div>
+      </div>
+    </div>
+
+    <div class="tl-item reveal">
+      <div class="tl-year">2022 – 2026</div>
+      <div class="tl-dot"></div>
+      <div class="tl-body">
+        <div class="tl-title">Dottorato di ricerca in Ingegneria per l'Energia e l'Ambiente</div>
+        <div class="tl-sub">Università della Tuscia · Viterbo</div>
+        <div class="tl-note">Ricerca su modelli decisionali multicriterio (AHP, SEESIM) applicati a investimenti pubblici sostenibili. 6 pubblicazioni internazionali.</div>
+      </div>
+    </div>
+
+    <div class="tl-item reveal">
+      <div class="tl-year">2023</div>
+      <div class="tl-dot"></div>
+      <div class="tl-body">
+        <div class="tl-title">Summer School "Francesco Turco" — Genova</div>
+        <div class="tl-sub">AIDI · Settembre 2023</div>
+        <div class="tl-note">Contributo su <em>Evaluation of Sustainability Indicators in Public Administration.</em></div>
+      </div>
+    </div>
+
+    <div class="tl-item reveal">
+      <div class="tl-year">2024</div>
+      <div class="tl-dot"></div>
+      <div class="tl-body">
+        <div class="tl-title">ISAHP 2024 — International Symposium on the Analytic Hierarchy Process</div>
+        <div class="tl-sub">Contributo: Python-Driven SEESIM per investimenti pubblici sostenibili</div>
+      </div>
+    </div>
+
+    <div class="tl-item reveal">
+      <div class="tl-year">2024</div>
+      <div class="tl-dot"></div>
+      <div class="tl-body">
+        <div class="tl-title">ISM Conference — Industry 4.0 &amp; Smart Manufacturing</div>
+        <div class="tl-sub">Praga · Novembre 2024</div>
+      </div>
+    </div>
+
+    <div class="tl-item milestone reveal">
+      <div class="tl-year">Feb 2026</div>
+      <div class="tl-dot"></div>
+      <div class="tl-body">
+        <div class="tl-title">Dottorato completato</div>
+        <div class="tl-sub">Università della Tuscia · Viterbo</div>
+      </div>
+    </div>
+
+    <div class="tl-item milestone reveal">
+      <div class="tl-year">Gen 2026</div>
+      <div class="tl-dot"></div>
+      <div class="tl-body">
+        <div class="tl-title">Winter School "Fare Impresa. Fare Comunità." — Ideazione di Atena Compass</div>
+        <div class="tl-sub">Atena Lucana · Impresa di Comunità</div>
+        <div class="tl-note">Nasce Atena Compass: prima applicazione territoriale del modello SEESIM.</div>
+      </div>
+    </div>
+
+    <div class="tl-item milestone reveal">
+      <div class="tl-year">Mag 2026</div>
+      <div class="tl-dot"></div>
+      <div class="tl-body">
+        <div class="tl-title">Esperto — Commissione Locale per il Paesaggio</div>
+        <div class="tl-sub">Comune di Padula · Discipline agricolo-forestali e naturalistiche</div>
+      </div>
+    </div>
+
+    <div class="tl-item flagship reveal">
+      <div class="tl-year">In corso</div>
+      <div class="tl-dot"></div>
+      <div class="tl-body">
+        <div class="tl-title">Diano Open Lab — Startup innovativa per l'Open Innovation territoriale</div>
+        <div class="tl-sub">Vallo di Diano · Concept paper v0.1</div>
+        <div class="tl-note">Il progetto in cui convergono tutte le traiettorie: ricerca, impresa, comunità, innovazione.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- RICERCA -->
+<section class="section alt" id="ricerca">
+  <div class="pub-list">
+    <div class="section-head reveal">
+      <span class="eyebrow">Ricerca</span>
+      <h2>Pubblicazioni e <em>contributi scientifici.</em></h2>
+      <p>Articoli, capitoli e contributi a conferenze su sostenibilità, metaverso applicato e <em>modelli decisionali multicriterio.</em></p>
+    </div>
+
+    <div class="pub-item reveal">
+      <span class="pub-year">2025</span>
+      <div>
+        <span class="pub-venue">Procedia Computer Science · Elsevier</span>
+        <span class="pub-title">Optimizing Coffee Supply Chain Transparency through Mobile Application</span>
+      </div>
+    </div>
+    <div class="pub-item reveal">
+      <span class="pub-year">2024</span>
+      <div>
+        <span class="pub-venue">ISM — 6th International Conference on Industry 4.0 &amp; Smart Manufacturing · Praga · Novembre 2024</span>
+        <span class="pub-title">Industry 4.0 &amp; Smart Manufacturing — contributo su tendenze emergenti</span>
+      </div>
+    </div>
+    <div class="pub-item reveal">
+      <span class="pub-year">2024</span>
+      <div>
+        <span class="pub-venue">ISAHP 2024 — International Symposium on the Analytic Hierarchy Process</span>
+        <span class="pub-title">From Theory To Application: A Python-Driven Implementation of the SEESIM Multi-Criteria Decision Model for Sustainable Public Investments</span>
+      </div>
+    </div>
+    <div class="pub-item reveal">
+      <span class="pub-year">2024</span>
+      <div>
+        <span class="pub-venue">CRC Press · Taylor & Francis</span>
+        <span class="pub-title">Reflections on Metaverse: A New Technology in the Super Smart Society</span>
+      </div>
+    </div>
+    <div class="pub-item reveal">
+      <span class="pub-year">2023</span>
+      <div>
+        <span class="pub-venue">XXVIII Summer School "Francesco Turco" · Genova · Settembre 2023</span>
+        <span class="pub-title">Evaluation of Sustainability Indicators in Public Administration – State of the art</span>
+        <a class="pub-link" href="https://www.summerschool-aidi.it/images/papers/session_6_2023/Camera_ready_ID65.pdf" target="_blank" rel="noopener">PDF →</a>
+      </div>
+    </div>
+    <div class="pub-item reveal">
+      <span class="pub-year">2023</span>
+      <div>
+        <span class="pub-venue">Applied Sciences · MDPI</span>
+        <span class="pub-title">How Does the Metaverse Shape Education? A Systematic Literature Review</span>
+      </div>
+    </div>
+
+    <div class="pub-academic-links reveal">
+      <a href="#" target="_blank" rel="noopener">ORCID →</a>
+      <a href="#" target="_blank" rel="noopener">Google Scholar →</a>
+    </div>
+  </div>
+</section>
+
+<!-- SCL -->
+<section class="section" id="scl">
+  <div class="scl-block">
+    <div class="scl-text reveal">
+      <span class="eyebrow">Fuori dalla ricerca</span>
+      <h2>SCL — il castagno <em>del Vallo di Diano.</em></h2>
+      <p>Sono socio di SCL S.r.l., un'azienda di Padula Scalo che lavora il castagno campano: dalla selezione del tronco in bosco alla trave consegnata in cantiere, passando per <em>oltre due anni di stagionatura naturale.</em> All'interno dell'azienda seguo la parte amministrativa e finanziaria — bilanci, controllo dei costi, valutazione degli investimenti.</p>
+      <p>Il castagno è anche il primo caso applicativo di Diano Open Lab: non soltanto una materia prima, ma una piattaforma di innovazione per edilizia sostenibile, design, economia circolare e turismo esperienziale.</p>
+      <a class="scl-link" href="./scl/">Visita il sito di SCL →</a>
+    </div>
+    <div class="scl-card reveal">
+      <span class="sc-label">SCL S.r.l.</span>
+      <div class="scl-fact"><strong>Sede</strong> — Padula Scalo (SA), Vallo di Diano</div>
+      <div class="scl-fact"><strong>Materiale</strong> — Castagno campano, filiera locale</div>
+      <div class="scl-fact"><strong>Stagionatura</strong> — oltre 24 mesi all'aria</div>
+      <div class="scl-fact"><strong>Consegna</strong> — Campania, Basilicata, Calabria</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTATTI -->
+<footer id="contatti">
+  <div class="section-head reveal" style="max-width:var(--max);margin:0 auto;">
+    <span class="eyebrow" style="color:#a8651f;">Contatti</span>
+    <h2>Restiamo <em>in contatto.</em></h2>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-item reveal">
+      <span class="c-label">Email</span>
+      <a href="mailto:info.gfr@icloud.com">info.gfr@icloud.com</a>
+    </div>
+    <div class="contact-item reveal">
+      <span class="c-label">Telefono</span>
+      <a href="tel:+393462284379">+39 346 2284379</a>
+    </div>
+    <div class="contact-item reveal">
+      <span class="c-label">Dove</span>
+      <span>Vallo di Diano · Napoli · Viterbo</span>
+    </div>
+  </div>
+  <div class="foot-bottom">© 2026 Gianfranco Iovine</div>
+</footer>
+
+<script>
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) {
+        e.target.classList.add('on');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
